@@ -293,26 +293,30 @@ async function analyze(){
   const truncated=docText.length>12000?docText.slice(0,12000)+'\n\n[... truncated ...]':docText;
   const icpList=ICPS.map(i=>'- '+i.id+': '+i.name+' — '+i.desc).join('\n');
 
-  const prompt=`Return ONLY a raw JSON object. No explanation, no markdown, no code fences, no text before or after the JSON. Start your response with { and end with }.
+  const prompt=`You are an expert document reviewer and devil's advocate. Respond with ONLY a valid JSON object — no markdown, no code fences, no text before or after. Start with { and end with }.
 
-You are an expert document reviewer and devil's advocate. Analyze the document below.
-
-AUTO-DETECT THE ICP from this list based on who the document is clearly written for:
-${icpList}
-
-DOCUMENT:
+DOCUMENT TO ANALYZE:
 ${truncated}
 
-INSTRUCTIONS:
-1. Pick the single best ICP match from the list.
-2. Score the document on 5 dimensions (0-100 each).
-3. For each dimension, give 1-2 specific improvement suggestions referencing the exact section/heading in the document.
-4. Write 3 sharp devil's advocate critiques the ICP would raise.
+STEP 1 — DETECT ICP:
+Read the document carefully and pick the SINGLE best ICP from these 4 options. Look at the language, pain points, use cases, and audience signals in the document itself — not just the topic.
 
-Respond with ONLY this JSON:
+- developer: Document mentions APIs, SDKs, code, technical integration, engineering teams, CI/CD, docs, open source, GitHub, performance, infrastructure. Audience is engineers or CTOs.
+- marketer: Document mentions campaigns, leads, conversions, content, SEO, email, attribution, ROI, brand, demand gen, HubSpot, analytics dashboards. Audience is marketing teams or CMOs.
+- agency: Document mentions client work, retainers, deliverables, white-label, multiple accounts, account management, creative briefs, client reporting. Audience is agency owners or account directors.
+- founder: Document mentions starting up, building a product, fundraising, early customers, MVPs, product-market fit, growth hacking, bootstrapping. Audience is startup founders or solo operators. ONLY choose founder if the document clearly targets founders — do NOT default to this.
+
+Pick the ICP whose signals appear MOST in the document. If developer/marketer/agency signals are present, pick that — not founder.
+
+STEP 2 — SCORE AND REVIEW:
+Score the document on 5 dimensions (0-100) against the detected ICP. Be harsh and specific.
+For each dimension give 1-2 suggestions referencing the exact section name from the document.
+Write 3 sharp devil's advocate critiques this ICP would raise.
+
+RESPOND WITH ONLY THIS JSON (no other text):
 {
-  "detected_icp": "founder|developer|marketer|agency",
-  "detected_icp_reason": "one sentence why",
+  "detected_icp": "developer|marketer|agency|founder",
+  "detected_icp_reason": "one sentence citing specific signals found in the document",
   "overall_verdict": "one sharp honest sentence",
   "icp_fit_score": 0,
   "scores": {
@@ -323,14 +327,14 @@ Respond with ONLY this JSON:
     "structure_and_ia": 0
   },
   "score_suggestions": {
-    "messaging_clarity": [{"section":"section name","suggestion":"fix"}],
-    "icp_alignment":     [{"section":"section name","suggestion":"fix"}],
-    "value_proposition": [{"section":"section name","suggestion":"fix"}],
-    "tone_and_language": [{"section":"section name","suggestion":"fix"}],
-    "structure_and_ia":  [{"section":"section name","suggestion":"fix"}]
+    "messaging_clarity": [{"section":"exact section name","suggestion":"specific fix"}],
+    "icp_alignment":     [{"section":"exact section name","suggestion":"specific fix"}],
+    "value_proposition": [{"section":"exact section name","suggestion":"specific fix"}],
+    "tone_and_language": [{"section":"exact section name","suggestion":"specific fix"}],
+    "structure_and_ia":  [{"section":"exact section name","suggestion":"specific fix"}]
   },
   "devil_advocate_critiques": [
-    {"dimension":"icp_alignment|messaging_clarity|value_proposition|tone_and_language|structure_and_ia","critique":"text"},
+    {"dimension":"icp_alignment|messaging_clarity|value_proposition|tone_and_language|structure_and_ia","critique":"sharp critique"},
     {"dimension":"...","critique":"..."},
     {"dimension":"...","critique":"..."}
   ],
