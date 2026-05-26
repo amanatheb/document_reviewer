@@ -23,20 +23,37 @@ app.post("/api/review", async (req, res) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.3, maxOutputTokens: 2048 }
+          generationConfig: {
+            temperature: 0.2,
+            maxOutputTokens: 2048,
+            responseMimeType: "application/json"   // force JSON output
+          }
         }),
       }
     );
     const data = await r.json();
-    if (!r.ok) return res.status(r.status).json({ error: data.error?.message || "Gemini API error" });
 
-    const raw   = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    if (!r.ok) {
+      const msg = data.error?.message || JSON.stringify(data.error) || "Gemini API error";
+      return res.status(r.status).json({ error: msg });
+    }
+
+    // Extract text from response
+    const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    if (!raw) throw new Error("Empty response from Gemini");
+
+    // Robustly extract JSON — find first { and last }
     const start = raw.indexOf("{");
     const end   = raw.lastIndexOf("}");
-    if (start === -1 || end === -1) throw new Error("No JSON in response");
+    if (start === -1 || end === -1) {
+      // Log what we got for debugging
+      console.error("Raw response:", raw.slice(0, 500));
+      throw new Error("No JSON found in response. Raw: " + raw.slice(0, 200));
+    }
     const result = JSON.parse(raw.slice(start, end + 1));
     res.json({ result });
   } catch (e) {
+    console.error("Review error:", e.message);
     res.status(500).json({ error: e.message });
   }
 });
