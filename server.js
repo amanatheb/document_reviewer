@@ -17,7 +17,7 @@ app.post("/api/review", async (req, res) => {
 
   try {
     const r = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${key}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
