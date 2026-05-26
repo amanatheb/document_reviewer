@@ -208,11 +208,21 @@ function checkReady() { const b=document.getElementById('analyzeBtn'); if(b) b.d
 
 // Tab switching
 function switchTab(tab) {
-  document.getElementById('fileTab').style.display = tab==='file'?'block':'none';
-  document.getElementById('urlTab').style.display = tab==='url'?'block':'none';
-  document.getElementById('tabFile').classList.toggle('active', tab==='file');
-  document.getElementById('tabUrl').classList.toggle('active', tab==='url');
-  removeDoc();
+  const ft=document.getElementById('fileTab');
+  const ut=document.getElementById('urlTab');
+  const tb=document.getElementById('tabFile');
+  const tu=document.getElementById('tabUrl');
+  if(ft) ft.style.display = tab==='file'?'block':'none';
+  if(ut) ut.style.display = tab==='url'?'block':'none';
+  if(tb) tb.classList.toggle('active', tab==='file');
+  if(tu) tu.classList.toggle('active', tab==='url');
+  // reset doc state when switching tabs
+  docText=''; sourceLabel='';
+  const fp=document.getElementById('filePill'); if(fp) fp.style.display='none';
+  const ep=document.getElementById('extractPreview'); if(ep) ep.style.display='none';
+  const pm=document.getElementById('processingMsg'); if(pm) pm.style.display='none';
+  const dz=document.getElementById('dropZone'); if(dz && tab==='file') dz.style.display='block';
+  hideError(); hideWarn(); checkReady();
 }
 
 // FILE UPLOAD
@@ -328,14 +338,17 @@ function setPill(label, showPreview) {
 
 function removeDoc() {
   docText=''; sourceLabel='';
-  document.getElementById('filePill').style.display='none';
-  document.getElementById('extractPreview').style.display='none';
-  document.getElementById('fileInput').value='';
-  document.getElementById('urlInput').value='';
-  document.getElementById('dropZone').style.display='block';
-  document.getElementById('b2').classList.remove('done');
-  hideError(); hideWarn();
-  checkReady();
+  const fp=document.getElementById('filePill'); if(fp) fp.style.display='none';
+  const ep=document.getElementById('extractPreview'); if(ep) ep.style.display='none';
+  const fi=document.getElementById('fileInput'); if(fi) fi.value='';
+  const ui=document.getElementById('urlInput'); if(ui) ui.value='';
+  // restore dropzone only if file tab is active
+  const ft=document.getElementById('fileTab');
+  const dz=document.getElementById('dropZone');
+  if(dz && ft && ft.style.display!=='none') dz.style.display='block';
+  else if(dz) dz.style.display='block'; // always restore for next time
+  const b2=document.getElementById('b2'); if(b2) b2.classList.remove('done');
+  hideError(); hideWarn(); checkReady();
 }
 
 // ANALYZE — calls server which calls Anthropic API
@@ -417,9 +430,23 @@ Respond with ONLY this JSON:
 }
 
 // UI helpers
-function showProcessing(t){const pt=document.getElementById('processingText');if(pt)pt.textContent=t;const pm=document.getElementById('processingMsg');if(pm)pm.style.display='flex';}
+function showProcessing(t){
+  const pt=document.getElementById('processingText'); if(pt) pt.textContent=t;
+  const pm=document.getElementById('processingMsg'); if(pm) pm.style.display='flex';
+  // only hide dropzone if we're on file tab
+  const ft=document.getElementById('fileTab');
+  const dz=document.getElementById('dropZone');
+  if(ft && ft.style.display!=='none' && dz) dz.style.display='none';
+}
 function updateProcessing(t){document.getElementById('processingText').textContent=t;}
-function hideProcessing(){const pm=document.getElementById('processingMsg');if(pm)pm.style.display='none';}
+function hideProcessing(){
+  const pm=document.getElementById('processingMsg'); if(pm) pm.style.display='none';
+  // restore dropzone if file tab is active and no file loaded
+  const ft=document.getElementById('fileTab');
+  const dz=document.getElementById('dropZone');
+  const fp=document.getElementById('filePill');
+  if(dz && ft && ft.style.display!=='none' && fp && fp.style.display==='none') dz.style.display='block';
+}
 function showError(t){const el=document.getElementById('errorBar');el.textContent=t;el.style.display='block';}
 function hideError(){document.getElementById('errorBar').style.display='none';}
 function showWarn(t){const el=document.getElementById('warnBar');el.textContent=t;el.style.display='block';}
