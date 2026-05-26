@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ICP Document Reviewer</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f7f6f3; --surface: #ffffff; --border: rgba(0,0,0,0.1);
+  --border-med: rgba(0,0,0,0.18); --text: #111; --muted: #666; --faint: #999;
+  --blue: #185FA5; --blue-l: #E6F1FB; --green: #3B6D11; --green-l: #EAF3DE;
+  --red: #A32D2D; --red-l: #FCEBEB; --amber: #854F0B; --amber-l: #FAEEDA;
+  --r: 10px; --rl: 14px;
+}
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; min-height: 100vh; }
+.page { max-width: 780px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+.subtitle { font-size: 14px; color: var(--muted); margin-bottom: 2rem; }
+.card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--rl); padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; }
+.label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 10px; }
+.icp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+.icp-tile { border: 1.5px solid var(--border); border-radius: var(--r); padding: 12px 14px; cursor: pointer; transition: all 0.14s; background: var(--surface); }
+.icp-tile:hover { border-color: var(--border-med); }
+.icp-tile.active { border-color: var(--blue); background: var(--blue-l); }
+.icp-tile .name { font-weight: 500; font-size: 14px; margin-bottom: 2px; }
+.icp-tile.active .name { color: #0C447C; }
+.icp-tile .desc { font-size: 12px; color: var(--muted); }
+.icp-tile.active .desc { color: var(--blue); }
+
+/* Tab switcher */
+.tab-row { display: flex; border: 0.5px solid var(--border-med); border-radius: var(--r); overflow: hidden; margin-bottom: 1rem; }
+.tab-btn { flex: 1; padding: 10px; font-size: 13px; font-weight: 500; background: #f5f4f1; color: var(--muted); border: none; cursor: pointer; transition: all 0.14s; }
+.tab-btn.active { background: var(--text); color: #fff; }
+.tab-btn:first-child { border-right: 0.5px solid var(--border-med); }
+
+.drop-zone { border: 1.5px dashed var(--border-med); border-radius: var(--rl); padding: 2rem; text-align: center; cursor: pointer; background: #fafaf8; transition: all 0.14s; }
+.drop-zone:hover, .drop-zone.over { border-color: var(--blue); background: var(--blue-l); }
+.drop-zone .icon { font-size: 28px; color: var(--muted); margin-bottom: 6px; }
+.drop-zone .main { font-size: 14px; color: var(--muted); }
+.drop-zone .hint { font-size: 12px; color: var(--faint); margin-top: 4px; }
+.file-pill { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #f0f0ed; border-radius: var(--r); }
+.file-pill .fname { font-size: 13px; font-weight: 500; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-pill .rm { cursor: pointer; color: var(--muted); font-size: 20px; line-height: 1; flex-shrink: 0; }
+.file-pill .rm:hover { color: var(--red); }
+.processing { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--blue-l); border-radius: var(--r); font-size: 13px; color: var(--blue); }
+.spinner { width: 15px; height: 15px; border: 2px solid #B5D4F4; border-top-color: var(--blue); border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* URL input */
+.url-input-row { display: flex; gap: 8px; }
+.url-input { flex: 1; padding: 10px 14px; border: 0.5px solid var(--border-med); border-radius: var(--r); font-size: 14px; font-family: inherit; background: var(--surface); color: var(--text); outline: none; transition: border-color 0.14s; }
+.url-input:focus { border-color: var(--blue); }
+.url-fetch-btn { padding: 10px 18px; border-radius: var(--r); border: none; background: var(--blue); color: #fff; font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; transition: opacity 0.14s; }
+.url-fetch-btn:hover { opacity: 0.88; }
+.url-fetch-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.url-hint { font-size: 12px; color: var(--faint); margin-top: 6px; }
+
+textarea { width: 100%; padding: 10px 14px; border: 0.5px solid var(--border-med); border-radius: var(--r); font-size: 14px; font-family: inherit; background: var(--surface); color: var(--text); resize: vertical; outline: none; transition: border-color 0.14s; }
+textarea:focus { border-color: var(--blue); }
+.btn { width: 100%; padding: 13px; border-radius: var(--r); border: none; background: #111; color: #fff; font-size: 15px; font-weight: 500; cursor: pointer; transition: opacity 0.14s; }
+.btn:hover { opacity: 0.85; }
+.btn:disabled { opacity: 0.38; cursor: not-allowed; }
+.step-badge { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--text); color: #fff; font-size: 12px; font-weight: 600; margin-right: 8px; flex-shrink: 0; }
+.step-badge.done { background: var(--green); }
+.step-row { display: flex; align-items: center; margin-bottom: 12px; font-size: 14px; font-weight: 500; }
+.prompt-box { background: #1a1a1a; color: #e8e8e8; border-radius: var(--r); padding: 1rem 1.25rem; font-size: 13px; font-family: monospace; line-height: 1.6; white-space: pre-wrap; word-break: break-word; max-height: 280px; overflow-y: auto; margin-bottom: 12px; }
+.copy-btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: var(--r); border: 1px solid var(--border-med); background: var(--surface); color: var(--text); font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.14s; }
+.copy-btn:hover { background: #f0f0ed; }
+.copy-btn.copied { background: var(--green-l); border-color: var(--green); color: var(--green); }
+.open-btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: var(--r); background: #c96a2a; color: #fff; font-size: 13px; font-weight: 500; text-decoration: none; border: none; cursor: pointer; transition: opacity 0.14s; margin-left: 8px; }
+.open-btn:hover { opacity: 0.88; }
+.how-box { background: var(--blue-l); border: 0.5px solid #B5D4F4; border-radius: var(--rl); padding: 1rem 1.25rem; margin-bottom: 1.5rem; font-size: 13px; color: #0C447C; line-height: 1.75; }
+.verdict-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--rl); padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; }
+.score-big { font-size: 28px; font-weight: 600; }
+.score-big span { font-size: 15px; font-weight: 400; color: var(--muted); }
+.badge { display: inline-block; padding: 3px 11px; border-radius: 99px; font-size: 12px; font-weight: 500; margin-left: 8px; vertical-align: middle; }
+.badge-g { background: var(--green-l); color: var(--green); }
+.badge-a { background: var(--amber-l); color: var(--amber); }
+.badge-r { background: var(--red-l); color: var(--red); }
+.verdict-text { font-size: 14px; color: var(--muted); font-style: italic; margin-top: 8px; }
+.score-row2 { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.score-lbl { font-size: 13px; color: var(--muted); min-width: 150px; }
+.bar-bg { flex: 1; height: 6px; background: #eeecea; border-radius: 99px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 99px; }
+.score-num { font-size: 13px; font-weight: 500; min-width: 32px; text-align: right; }
+.section-head { font-size: 13px; font-weight: 600; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 0.5px solid var(--border); }
+.item-r { padding: 10px 14px; border-left: 2.5px solid #E24B4A; background: var(--red-l); border-radius: 0 var(--r) var(--r) 0; margin-bottom: 8px; font-size: 13px; color: #3d0f0f; line-height: 1.55; }
+.item-g { padding: 10px 14px; border-left: 2.5px solid #639922; background: var(--green-l); border-radius: 0 var(--r) var(--r) 0; margin-bottom: 8px; font-size: 13px; color: #173404; line-height: 1.55; }
+.item-b { padding: 10px 14px; border-left: 2.5px solid var(--blue); background: var(--blue-l); border-radius: 0 var(--r) var(--r) 0; margin-bottom: 8px; font-size: 13px; color: #042C53; line-height: 1.55; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 1rem; }
+.summary-box { padding: 14px 16px; border-radius: var(--r); font-size: 13px; line-height: 1.55; }
+.summary-box .lbl { font-weight: 600; margin-bottom: 5px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+.divider { height: 0.5px; background: var(--border); margin: 1.25rem 0; }
+.error { padding: 12px 14px; background: var(--red-l); border-radius: var(--r); font-size: 13px; color: var(--red); margin-top: 1rem; }
+.warn { padding: 12px 14px; background: var(--amber-l); border-radius: var(--r); font-size: 13px; color: var(--amber); margin-top: 8px; }
+input[type="file"] { display: none; }
+#customBlock { display: none; margin-top: 10px; }
+#extractPreview { display: none; margin-top: 10px; }
+/* ── Dimension colour palette ── */
+/* Each dimension gets a unique accent: blue / purple / orange / teal / indigo */
+:root {
+  --d1:#185FA5; --d1l:#E6F1FB; /* messaging_clarity  → blue   */
+  --d2:#6B3FA0; --d2l:#F0EAF9; /* icp_alignment      → purple */
+  --d3:#B05C10; --d3l:#FAEEDA; /* value_proposition  → amber  */
+  --d4:#0E7C5B; --d4l:#E2F4EE; /* tone_and_language  → teal   */
+  --d5:#1F4D8C; --d5l:#E8EEF9; /* structure_and_ia   → indigo */
+}
+/* Dimension block */
+.dim-block { margin-bottom: 1rem; border-radius: var(--r); overflow: hidden; border: 1px solid var(--border); }
+.dim-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; }
+.dim-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.dim-title { font-size: 13px; font-weight: 700; flex: 1; }
+.dim-bar { flex: 1; height: 5px; border-radius: 99px; overflow: hidden; max-width: 90px; background: rgba(0,0,0,0.08); }
+.dim-fill { height: 100%; border-radius: 99px; }
+.dim-score { font-size: 13px; font-weight: 700; min-width: 44px; text-align: right; }
+/* Suggestion cards — coloured left border matching dimension */
+.suggestion-card { background: var(--surface); border-bottom: 0.5px solid var(--border); }
+.suggestion-card:last-child { border-bottom: none; }
+.suggestion-card .sc-header { display: flex; align-items: center; gap: 7px; padding: 7px 14px; font-size: 11px; font-weight: 600; border-top: 0.5px solid var(--border); }
+.suggestion-card .sc-section { padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; background: rgba(0,0,0,0.06); }
+.suggestion-card .sc-body { padding: 8px 14px 12px; font-size: 13px; color: var(--text); line-height: 1.65; }
+/* Critique cards */
+.critique-card { border-radius: var(--r); margin-bottom: 8px; overflow: hidden; }
+.critique-card .cc-head { display: flex; align-items: center; gap: 8px; padding: 8px 12px; font-size: 11px; font-weight: 700; }
+.critique-card .cc-body { padding: 8px 14px 12px; font-size: 13px; line-height: 1.65; }
+/* ICP auto tag */
+.icp-auto-tag { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 99px; background: var(--green-l); color: var(--green); font-size: 11px; font-weight: 600; margin-left: 8px; }
+/* score legend pill */
+.score-pill { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border-radius: 99px; font-size: 11px; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>ICP Document Reviewer</h1>
+  <p class="subtitle">Devil's advocate review against your Ideal Customer Profile — no API key needed, uses Claude.ai</p>
+
+  <div class="how-box">
+    <strong>How it works:</strong> Upload a file or paste a URL → click Analyze → get your review instantly. ICP is auto-detected from your document.
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="card">
+    <div class="step-row"><span class="step-badge" id="b2">1</span>Add Document</div>
+
+    <div class="tab-row">
+      <button class="tab-btn active" id="tabFile" onclick="switchTab('file')">📁 Upload File</button>
+      <button class="tab-btn" id="tabUrl" onclick="switchTab('url')">🔗 Paste URL</button>
+    </div>
+
+    <!-- FILE TAB -->
+    <div id="fileTab">
+      <input type="file" id="fileInput" accept=".txt,.md,.html,.csv,.pdf,.docx,.doc,.png,.jpg,.jpeg"/>
+      <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+        <div class="icon">↑</div>
+        <div class="main">Click to upload or drag & drop</div>
+        <div class="hint">PDF (text extracted automatically), plain text, markdown, or image</div>
+      </div>
+    </div>
+
+    <!-- URL TAB -->
+    <div id="urlTab" style="display:none;">
+      <div class="url-input-row">
+        <input type="text" class="url-input" id="urlInput" placeholder="https://docs.google.com/… or any public webpage URL" />
+        <button class="url-fetch-btn" id="fetchBtn" onclick="fetchURL()">Fetch content</button>
+      </div>
+      <div class="url-hint">Works with: public webpages, Google Docs (published), Notion pages (public), blog posts, landing pages</div>
+    </div>
+
+    <div id="processingMsg" style="display:none;margin-top:10px;" class="processing">
+      <div class="spinner"></div><span id="processingText">Processing…</span>
+    </div>
+    <div id="filePill" style="display:none;margin-top:10px;" class="file-pill">
+      <span style="font-size:18px;" id="fileIcon">📄</span>
+      <span class="fname" id="fileName"></span>
+      <span class="rm" onclick="removeDoc()">×</span>
+    </div>
+    <div id="extractPreview">
+      <div class="label">Extracted content preview</div>
+      <textarea id="extractedText" rows="5" style="font-size:12px;color:var(--muted);"></textarea>
+    </div>
+    <div id="warnBar" style="display:none;" class="warn"></div>
+  </div>
+
+  <button class="btn" id="analyzeBtn" disabled onclick="generatePrompt()">Analyze →</button>
+  <div id="errorBar" style="display:none;" class="error"></div>
+
+
+  <div id="results" style="margin-top:1.5rem;"></div>
+</div>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+const ICPS = [
+  { id:'founder', name:'Founder', desc:'Early-stage, resource-constrained, wears all hats', profile:'ICP: Founder / early-stage entrepreneur. Pre-seed to Series A. Makes all buying decisions alone, fast. Pain points: limited time, tight budget, needs immediate ROI, overwhelmed by complexity. Evaluates by skimming — headline, price, one proof point. Values: simplicity, speed-to-value, transparent pricing, founder testimonials. Concerns: wasting money, lock-in, tools that need a team to operate. Red flags: enterprise jargon, long onboarding, vague pricing.' },
+  { id:'developer', name:'Developer', desc:'Engineers, technical leads, CTOs', profile:'ICP: Developer / technical buyer. Role: engineer, tech lead, or CTO. Evaluates by trying the product — reads docs before talking to sales. Pain points: poor APIs, missing SDKs, bad documentation, hidden rate limits, vendor lock-in. Values: open source friendliness, clear API reference, code examples, active community, honest changelog. Concerns: reliability at scale, pricing transparency, proprietary formats. Skips marketing copy, looks for technical depth.' },
+  { id:'marketer', name:'Marketer', desc:'Growth, content, demand gen, brand', profile:'ICP: Marketer / growth professional. Role: head of marketing, content lead, demand gen, or brand manager. Pain points: proving ROI, fragmented tools, slow content production, poor analytics. Evaluates based on outcomes and case studies — wants to see metrics. Values: integrations with existing stack (HubSpot, GA, etc.), dashboards, templates, speed. Concerns: steep learning curve, no clear attribution, tools that need developer help. Responds to social proof, benchmarks, and before/after results.' },
+  { id:'agency', name:'Agency', desc:'Creative, digital, or marketing agencies', profile:"ICP: Agency buyer. Role: agency owner, operations lead, or account director. Manages multiple clients, needs multi-seat or white-label solutions. Pain points: client reporting overhead, context switching, tools that don't scale across accounts, margin pressure. Values: white-labelling, client management features, bulk pricing, fast onboarding for new clients. Concerns: per-seat pricing that kills margins, tools that look unprofessional to clients, no reseller program. Buys on efficiency and client impression." },
+  { id:'custom', name:'Custom ICP', desc:'Define your own profile', profile:null },
+];
+
+let selectedICP=null, docText='', sourceLabel='';
+
+// ICP auto-detected — no manual grid needed
+function checkReady() { const b=document.getElementById('analyzeBtn'); if(b) b.disabled=!docText; }
+
+// Tab switching
+function switchTab(tab) {
+  document.getElementById('fileTab').style.display = tab==='file'?'block':'none';
+  document.getElementById('urlTab').style.display = tab==='url'?'block':'none';
+  document.getElementById('tabFile').classList.toggle('active', tab==='file');
+  document.getElementById('tabUrl').classList.toggle('active', tab==='url');
+  removeDoc();
+}
+
+// FILE UPLOAD
+const drop=document.getElementById('dropZone');
+drop.addEventListener('dragover',e=>{e.preventDefault();drop.classList.add('over');});
+drop.addEventListener('dragleave',()=>drop.classList.remove('over'));
+drop.addEventListener('drop',e=>{e.preventDefault();drop.classList.remove('over');if(e.dataTransfer.files[0])readFile(e.dataTransfer.files[0]);});
+document.getElementById('fileInput').addEventListener('change',e=>{if(e.target.files[0])readFile(e.target.files[0]);});
+
+async function readFile(file) {
+  hideWarn(); hideError();
+  sourceLabel = file.name;
+
+  if (file.type.startsWith('image/')) {
+    docText = '[IMAGE FILE: '+file.name+']\nThis is an image/screenshot-based document. Analyze layout, messaging, visible text, charts, and design quality against the ICP.';
+    document.getElementById('fileIcon').textContent='🖼️';
+    setPill(file.name, false); return;
+  }
+
+  if (file.type==='application/pdf' || file.name.endsWith('.pdf')) {
+    showProcessing('Extracting text from PDF…');
+    try {
+      const buf = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({data:buf}).promise;
+      let full='';
+      for (let i=1;i<=pdf.numPages;i++) {
+        updateProcessing(`Extracting text (${i}/${pdf.numPages} pages)…`);
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        full += `\n--- Page ${i} ---\n` + content.items.map(x=>x.str).join(' ');
+      }
+      docText = full.trim() || '[PDF is image-based — no text layer found. Add description in context field.]';
+      document.getElementById('fileIcon').textContent='📕';
+      hideProcessing();
+      setPill(file.name, true);
+    } catch(e) { hideProcessing(); showError('Could not read PDF: '+e.message); }
+    return;
+  }
+
+  // Text-based
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const text=e.target.result||'';
+    const binary=(text.match(/[\x00-\x08\x0E-\x1F]/g)||[]).length;
+    if (binary>50) {
+      docText='[Binary/unsupported file: '+file.name+']';
+      showWarn('This file appears binary (e.g. .docx). For best results, export as PDF or save as .txt and re-upload.');
+    } else {
+      docText=text;
+    }
+    document.getElementById('fileIcon').textContent='📄';
+    setPill(file.name, !binary);
+  };
+  reader.onerror=()=>{docText='[Could not read: '+file.name+']'; setPill(file.name,false);};
+  reader.readAsText(file);
+}
+
+// URL FETCH — goes through our own server (no CORS issues)
+async function fetchURL() {
+  const url = document.getElementById('urlInput').value.trim();
+  if (!url) { showError('Please enter a URL.'); return; }
+  if (!url.startsWith('http')) { showError('URL must start with http:// or https://'); return; }
+
+  hideError(); hideWarn();
+  showProcessing('Fetching URL…');
+  document.getElementById('fetchBtn').disabled = true;
+
+  try {
+    const res = await fetch('/api/fetch-url', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({url}),
+      signal: AbortSignal.timeout(15000)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Server error');
+
+    const html = data.html || '';
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html
+      .replace(/<script[\s\S]*?<\/script>/gi,'')
+      .replace(/<style[\s\S]*?<\/style>/gi,'')
+      .replace(/<nav[\s\S]*?<\/nav>/gi,'')
+      .replace(/<footer[\s\S]*?<\/footer>/gi,'')
+      .replace(/<header[\s\S]*?<\/header>/gi,'');
+    let text = (tmp.innerText || tmp.textContent || '').replace(/\s{3,}/g,'\n\n').trim();
+
+    if (text.length < 100) throw new Error('No readable text found. Page may be JS-rendered or require login.');
+
+    docText = `[SOURCE URL: ${url}]\n\n${text}`;
+    sourceLabel = url;
+    document.getElementById('fileIcon').textContent = '🌐';
+    hideProcessing();
+    setPill(url.length>60 ? url.slice(0,57)+'…' : url, true);
+    if (text.length < 500) showWarn('Limited text extracted — page may be JS-rendered.');
+  } catch(e) {
+    hideProcessing();
+    showError('Could not fetch URL: ' + e.message);
+  }
+  document.getElementById('fetchBtn').disabled = false;
+}
+
+function setPill(label, showPreview) {
+  document.getElementById('fileName').textContent=label;
+  document.getElementById('filePill').style.display='flex';
+  if (showPreview && docText) {
+    document.getElementById('extractedText').value=docText.slice(0,1200)+(docText.length>1200?'\n\n[… preview truncated]':'');
+    document.getElementById('extractPreview').style.display='block';
+  }
+  document.getElementById('b2').classList.add('done');
+  checkReady();
+}
+
+function removeDoc() {
+  docText=''; sourceLabel='';
+  document.getElementById('filePill').style.display='none';
+  document.getElementById('extractPreview').style.display='none';
+  document.getElementById('fileInput').value='';
+  document.getElementById('urlInput').value='';
+  document.getElementById('dropZone').style.display='block';
+  document.getElementById('b2').classList.remove('done');
+  hideError(); hideWarn();
+  checkReady();
+}
+
+// ANALYZE — calls server which calls Anthropic API
+async function generatePrompt() {
+  if(!docText) return;
+  const truncated = docText.length>12000 ? docText.slice(0,12000)+'
+
+[... document truncated ...]' : docText;
+  const icpList = ICPS.map(i=>`- ${i.id}: ${i.name} — ${i.desc}`).join('
+');
+
+  const prompt = `You are an expert document reviewer and devil's advocate. Analyze the document below and respond ONLY with a valid JSON object — no markdown, no backticks, no text before or after.
+
+AUTO-DETECT THE ICP from this list based on who this document is clearly written for:
+${icpList}
+Pick the single best match.
+
+DOCUMENT:
+${truncated}
+
+INSTRUCTIONS:
+1. Identify the detected ICP — pick the single best fit from the list above.
+2. Score the document on 5 dimensions (0-100 each).
+3. For each dimension, provide 1-2 specific improvement suggestions mapped to that dimension, referencing the exact section/heading in the document where the issue appears.
+4. Write 3 sharp devil's advocate critiques — things the ICP would immediately question or reject.
+5. Each improvement suggestion must include: which dimension it maps to, which doc section it refers to, and the specific fix needed.
+
+Respond with ONLY this JSON:
+{
+  "detected_icp": "founder|developer|marketer|agency",
+  "detected_icp_reason": "one sentence explaining why this ICP was detected",
+  "overall_verdict": "one sharp honest sentence",
+  "icp_fit_score": 0,
+  "scores": {
+    "messaging_clarity": 0,
+    "icp_alignment": 0,
+    "value_proposition": 0,
+    "tone_and_language": 0,
+    "structure_and_ia": 0
+  },
+  "score_suggestions": {
+    "messaging_clarity": [{"section": "exact section name in doc", "suggestion": "specific fix"}],
+    "icp_alignment": [{"section": "exact section name", "suggestion": "specific fix"}],
+    "value_proposition": [{"section": "exact section name", "suggestion": "specific fix"}],
+    "tone_and_language": [{"section": "exact section name", "suggestion": "specific fix"}],
+    "structure_and_ia": [{"section": "exact section name", "suggestion": "specific fix"}]
+  },
+  "devil_advocate_critiques": [
+    {"dimension": "icp_alignment|messaging_clarity|value_proposition|tone_and_language|structure_and_ia", "critique": "sharp critique text"},
+    {"dimension": "...", "critique": "..."},
+    {"dimension": "...", "critique": "..."}
+  ],
+  "strongest_aspect": "what the doc does best",
+  "biggest_risk": "the single most damaging gap vs the ICP"
+}`;
+
+  hideError();
+  document.getElementById('results').innerHTML = '';
+  const btn = document.getElementById('analyzeBtn');
+  if(btn) btn.disabled = true;
+  showProcessing('Analyzing with Claude…');
+
+  try {
+    const res = await fetch('/api/review', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({prompt})
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.error || 'Server error '+res.status);
+    hideProcessing();
+    if(data.result.detected_icp) selectedICP = data.result.detected_icp;
+    renderResults(data.result);
+  } catch(e) {
+    hideProcessing();
+    showError('Analysis failed: ' + e.message);
+  }
+  if(btn) btn.disabled = false;
+}
+
+// UI helpers
+function showProcessing(t){const pt=document.getElementById('processingText');if(pt)pt.textContent=t;const pm=document.getElementById('processingMsg');if(pm)pm.style.display='flex';}
+function updateProcessing(t){document.getElementById('processingText').textContent=t;}
+function hideProcessing(){const pm=document.getElementById('processingMsg');if(pm)pm.style.display='none';}
+function showError(t){const el=document.getElementById('errorBar');el.textContent=t;el.style.display='block';}
+function hideError(){document.getElementById('errorBar').style.display='none';}
+function showWarn(t){const el=document.getElementById('warnBar');el.textContent=t;el.style.display='block';}
+function hideWarn(){document.getElementById('warnBar').style.display='none';}
+function sc(v){return v>=75?'#639922':v>=50?'#BA7517':'#E24B4A';}
+
+const DIM_LABELS = {
+  messaging_clarity: 'Messaging Clarity',
+  icp_alignment: 'ICP Alignment',
+  value_proposition: 'Value Proposition',
+  tone_and_language: 'Tone & Language',
+  structure_and_ia: 'Structure & IA'
+};
+
+function renderResults(r) {
+  const fit = r.icp_fit_score||0;
+  const bc = fit>=75?'badge-g':fit>=50?'badge-a':'badge-r';
+  const bl = fit>=75?'Good fit':fit>=50?'Partial fit':'Poor fit';
+  const icpObj = ICPS.find(i=>i.id===(r.detected_icp||selectedICP));
+  const icpName = icpObj ? icpObj.name : (r.detected_icp||'Unknown ICP');
+  if(r.detected_icp) selectedICP = r.detected_icp;
+
+  // Colour config per dimension — accent, light bg, text colour
+  const DIM_COLOURS = {
+    messaging_clarity:  {a:'#185FA5', l:'#E6F1FB', t:'#0C447C', dot:'#185FA5'},
+    icp_alignment:      {a:'#6B3FA0', l:'#F0EAF9', t:'#3D1A6E', dot:'#6B3FA0'},
+    value_proposition:  {a:'#B05C10', l:'#FAEEDA', t:'#6B3600', dot:'#B05C10'},
+    tone_and_language:  {a:'#0E7C5B', l:'#E2F4EE', t:'#0A4F3A', dot:'#0E7C5B'},
+    structure_and_ia:   {a:'#1F4D8C', l:'#E8EEF9', t:'#0D2D5E', dot:'#1F4D8C'},
+  };
+
+  const scores = r.scores||{};
+  const suggestions = r.score_suggestions||{};
+
+  const scoresHtml = Object.entries(scores).map(([k,v])=>{
+    const label = DIM_LABELS[k]||k;
+    const col = DIM_COLOURS[k]||{a:'#555',l:'#f5f5f5',t:'#222',dot:'#555'};
+    const dimSuggs = suggestions[k]||[];
+    const suggHtml = dimSuggs.map(s=>`
+      <div class="suggestion-card">
+        <div class="sc-header" style="background:${col.l};color:${col.t};">
+          <span style="width:8px;height:8px;border-radius:50%;background:${col.a};flex-shrink:0;display:inline-block;"></span>
+          <span style="font-weight:700;">${label}</span>
+          <span class="sc-section" style="background:rgba(0,0,0,0.07);color:${col.t};">📍 ${s.section||'General'}</span>
+        </div>
+        <div class="sc-body" style="border-left:3px solid ${col.a};">${s.suggestion}</div>
+      </div>`).join('');
+    return `<div class="dim-block" style="border-color:${col.a}30;">
+      <div class="dim-header" style="background:${col.l};">
+        <span class="dim-dot" style="background:${col.a};"></span>
+        <span class="dim-title" style="color:${col.t};">${label}</span>
+        <div class="dim-bar"><div class="dim-fill" style="width:${v}%;background:${col.a};"></div></div>
+        <span class="dim-score" style="color:${col.a};">${v}/100</span>
+      </div>
+      ${suggHtml}
+    </div>`;
+  }).join('');
+
+  // Critiques — severity colour coding: red=high / amber=medium based on dimension
+  const CRITIQUE_SEVERITY = {
+    icp_alignment:'high', value_proposition:'high',
+    messaging_clarity:'medium', tone_and_language:'medium', structure_and_ia:'medium'
+  };
+  const critiquesHtml = (r.devil_advocate_critiques||[]).map(c=>{
+    const obj = typeof c==='object' ? c : {dimension:'general',critique:c};
+    const sev = CRITIQUE_SEVERITY[obj.dimension]||'medium';
+    const dimLabel = DIM_LABELS[obj.dimension]||obj.dimension||'General';
+    const col = DIM_COLOURS[obj.dimension]||{a:'#E24B4A',l:'#FCEBEB',t:'#3d0f0f'};
+    const sevBg = sev==='high' ? '#FCEBEB' : '#FAEEDA';
+    const sevBorder = sev==='high' ? '#E24B4A' : '#C97B20';
+    const sevText = sev==='high' ? '#3d0f0f' : '#5C3200';
+    const sevTag = sev==='high'
+      ? `<span style="padding:2px 7px;border-radius:4px;background:#E24B4A;color:#fff;font-size:10px;font-weight:700;margin-right:4px;">HIGH</span>`
+      : `<span style="padding:2px 7px;border-radius:4px;background:#C97B20;color:#fff;font-size:10px;font-weight:700;margin-right:4px;">MED</span>`;
+    return `<div class="critique-card" style="background:${sevBg};border-left-color:${sevBorder};">
+      <div class="cc-head" style="background:${sevBg};color:${sevText};border-bottom:0.5px solid ${sevBorder}30;">
+        ${sevTag}
+        <span style="padding:2px 8px;border-radius:4px;background:${col.l};color:${col.a};font-size:11px;font-weight:600;">${dimLabel}</span>
+      </div>
+      <div class="cc-body" style="color:${sevText};">${obj.critique||c}</div>
+    </div>`;
+  }).join('');
+
+  const resultsEl = document.getElementById('results');
+  if(!resultsEl) return;
+  resultsEl.innerHTML=`
+    <div class="divider"></div>
+    <div class="verdict-card">
+      ${r.detected_icp_reason ? `<div style="font-size:12px;font-weight:600;color:var(--green);background:var(--green-l);padding:7px 12px;border-radius:var(--r);margin-bottom:12px;display:inline-flex;align-items:center;gap:6px;">🎯 Auto-detected ICP: <strong>${icpName}</strong> — ${r.detected_icp_reason}</div>` : ''}
+      <div style="margin-bottom:6px;">
+        <span class="score-big">${fit}<span>/100</span></span>
+        <span class="badge ${bc}">${bl}</span>
+      </div>
+      <div class="verdict-text">"${r.overall_verdict}"</div>
+    </div>
+    <div class="card">
+      <div class="label" style="margin-bottom:1rem;">Dimension Scores & Improvements</div>
+      ${scoresHtml}
+    </div>
+    <div class="card">
+      <div class="section-head" style="margin-bottom:12px;">
+        Devil's Advocate Critiques
+        <span style="font-size:11px;font-weight:400;color:var(--muted);margin-left:8px;">
+          <span style="background:#E24B4A;color:#fff;padding:1px 6px;border-radius:3px;font-weight:700;">HIGH</span> = ICP dealbreaker &nbsp;
+          <span style="background:#C97B20;color:#fff;padding:1px 6px;border-radius:3px;font-weight:700;">MED</span> = fixable gap
+        </span>
+      </div>
+      ${critiquesHtml}
+    </div>
+    <div class="two-col">
+      <div class="summary-box" style="background:var(--green-l);color:#173404;"><div class="lbl" style="color:var(--green);">Strongest aspect</div>${r.strongest_aspect}</div>
+      <div class="summary-box" style="background:var(--red-l);color:#3d0f0f;"><div class="lbl" style="color:var(--red);">Biggest risk</div>${r.biggest_risk}</div>
+    </div>`;
+  resultsEl.scrollIntoView({behavior:'smooth',block:'start'});
+}
+</script>
+</body>
+</html>
