@@ -293,7 +293,9 @@ async function analyze(){
   const truncated=docText.length>12000?docText.slice(0,12000)+'\n\n[... truncated ...]':docText;
   const icpList=ICPS.map(i=>'- '+i.id+': '+i.name+' — '+i.desc).join('\n');
 
-  const prompt=`You are an expert document reviewer and devil's advocate. Analyze the document and respond ONLY with a valid JSON object — no markdown, no backticks, no text before or after.
+  const prompt=`Return ONLY a raw JSON object. No explanation, no markdown, no code fences, no text before or after the JSON. Start your response with { and end with }.
+
+You are an expert document reviewer and devil's advocate. Analyze the document below.
 
 AUTO-DETECT THE ICP from this list based on who the document is clearly written for:
 ${icpList}
