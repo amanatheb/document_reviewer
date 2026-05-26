@@ -8,48 +8,48 @@ const app = express();
 app.use(express.json({ limit: "2mb" }));
 app.use(express.static("public"));
 
-// ── Gemini review ─────────────────────────────────────────────────────────────
+// ── Groq review ───────────────────────────────────────────────────────────────
 app.post("/api/review", async (req, res) => {
   const { prompt } = req.body;
   if (!prompt) return res.status(400).json({ error: "No prompt provided." });
-  const key = process.env.GEMINI_API_KEY;
-  if (!key) return res.status(500).json({ error: "GEMINI_API_KEY not set on server." });
+  const key = process.env.GROQ_API_KEY;
+  if (!key) return res.status(500).json({ error: "GROQ_API_KEY not set on server." });
 
   try {
-    const r = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            temperature: 0.2,
-            maxOutputTokens: 2048,
-            responseMimeType: "application/json"   // force JSON output
-          }
-        }),
-      }
-    );
-    const data = await r.json();
+    const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + key
+      },
+      body: JSON.stringify({
+        model: "llama-3.3-70b-versatile",
+        messages: [
+          {
+            role: "system",
+            content: "You are an expert document reviewer. You MUST respond with ONLY a valid JSON object. No markdown, no code fences, no explanation. Start with { and end with }."
+          },
+          { role: "user", content: prompt }
+        ],
+        temperature: 0.2,
+        max_tokens: 2048,
+        response_format: { type: "json_object" }  // force JSON
+      }),
+    });
 
+    const data = await r.json();
     if (!r.ok) {
-      const msg = data.error?.message || JSON.stringify(data.error) || "Gemini API error";
+      const msg = data.error?.message || JSON.stringify(data.error) || "Groq API error";
       return res.status(r.status).json({ error: msg });
     }
 
-    // Extract text from response
-    const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-    if (!raw) throw new Error("Empty response from Gemini");
+    const raw = data.choices?.[0]?.message?.content || "";
+    if (!raw) throw new Error("Empty response from Groq");
 
-    // Robustly extract JSON — find first { and last }
     const start = raw.indexOf("{");
     const end   = raw.lastIndexOf("}");
-    if (start === -1 || end === -1) {
-      // Log what we got for debugging
-      console.error("Raw response:", raw.slice(0, 500));
-      throw new Error("No JSON found in response. Raw: " + raw.slice(0, 200));
-    }
+    if (start === -1 || end === -1) throw new Error("No JSON in response: " + raw.slice(0, 200));
+
     const result = JSON.parse(raw.slice(start, end + 1));
     res.json({ result });
   } catch (e) {
