@@ -505,7 +505,7 @@ async function runFullAnalysis(icpList, desc){
   const dimList=Object.values(DIM_GROUPS).flatMap(g=>g.dims).map(d=>`- ${d.k}: ${d.label} — ${d.what}`).join('\n');
   const dimKeys=Object.values(DIM_GROUPS).flatMap(g=>g.dims).map(d=>d.k);
   const scoreTpl=dimKeys.map(k=>`"${k}":0`).join(',');
-  const suggTpl=dimKeys.map(k=>`"${k}":[{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}]`).join(',');
+  const suggTpl=dimKeys.map(k=>`"${k}":[{"section":"","what_is_wrong":"","suggestion":"","icps_benefited":"","example_statement":""}]`).join(',');
 
   const multiMode=icpList.length>1;
 
@@ -538,7 +538,7 @@ ${desc?`ICP DESCRIPTION: "${desc}" — use this to refine the analysis specifica
 DOCUMENT:
 ${doc}
 
-Score each dimension 0-100 (be harsh). For each give 1-2 suggestions with exact section names, what is wrong, a fix, and a copy-paste example statement.
+Score each dimension 0-100 (be harsh). For each give 1-2 suggestions with: exact section name, what is wrong, a specific fix, which ICPs benefit from this fix (icps_benefited field), and a copy-paste example statement.
 Write 4 devil's advocate critiques.
 
 DIMENSIONS TO SCORE:
@@ -560,26 +560,40 @@ RESPOND WITH ONLY:
 }
 
 function buildMultiPrompt(icpList, icpDetails, doc, dimList, dimKeys, scoreTpl, suggTpl){
-  const perIcpTpl=icpList.map(id=>`"${id}":{"icp_fit_score":0,"overall_verdict":"","scores":{${scoreTpl}},"score_suggestions":{${suggTpl}},"devil_advocate_critiques":[{"dimension":"...","critique":"..."},{"dimension":"...","critique":"..."},{"dimension":"...","critique":"..."}],"strongest_aspect":"...","biggest_risk":"..."}`).join(',');
-  return `You are an expert document reviewer. Respond ONLY with valid JSON. No markdown, no code fences. Start { end }.
+  const icpNames=icpList.map(id=>ICPS[id]?.name||id).join(', ');
+  return `You are an expert document reviewer and devil's advocate. Respond with ONLY valid JSON. No markdown, no code fences, no extra text. Start { end }.
 
-Analyze this document for MULTIPLE ICPs. Score it separately for each ICP listed.
+TARGET ICPs: ${icpNames}
+This document needs to work for ALL of these audiences simultaneously.
 
-TARGET ICPs:
+AUDIENCE DETAILS:
 ${icpDetails}
 
 DOCUMENT:
 ${doc}
 
-For EACH ICP, score all dimensions 0-100, give 1-2 suggestions per dimension with exact section references, what is wrong, a fix, and a copy-paste example statement. Write 3 devil's advocate critiques per ICP.
+Score each dimension 0-100 considering how well the doc serves ALL the listed ICPs together — not separately.
+For each dimension give 1-2 suggestions that would improve the doc for ALL ICPs simultaneously.
+Each suggestion must clearly state which ICPs benefit from it.
+Write 4 devil's advocate critiques — each from the perspective of one of the ICPs.
 
-DIMENSIONS:
+DIMENSIONS TO SCORE:
 ${dimList}
 
 RESPOND WITH ONLY:
 {
-  "overall_summary": "one sentence comparing how the doc performs across all ICPs",
-  "per_icp": {${perIcpTpl}}
+  "icp_fit_score": 0,
+  "overall_verdict": "one sharp sentence about how well the doc serves all ICPs together",
+  "scores": {${scoreTpl}},
+  "score_suggestions": {${suggTpl}},
+  "devil_advocate_critiques": [
+    {"dimension":"...","icp":"developer|marketer|agency|founder","critique":"..."},
+    {"dimension":"...","icp":"...","critique":"..."},
+    {"dimension":"...","icp":"...","critique":"..."},
+    {"dimension":"...","icp":"...","critique":"..."}
+  ],
+  "strongest_aspect": "what the doc does best across all ICPs",
+  "biggest_risk": "the biggest gap that fails one or more ICPs"
 }`;
 }
 
@@ -589,28 +603,36 @@ function renderResults(r, icpList, desc){
   if(!el)return;
   const isMulti=icpList.length>1&&r.per_icp;
 
-  if(isMulti){
-    renderMulti(r, icpList, desc, el);
-  } else {
-    renderSingle(r, icpList[0], desc, el);
-  }
+  // Always render as single unified result — multi-ICP is one combined review
+  renderSingle(r, icpList[0], desc, el, icpList);
   el.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-function renderSingle(r, icpId, desc, el){
-  const icp=ICPS[icpId]||{name:icpId,color:'#555',light:'#f5f5f5'};
+function renderSingle(r, icpId, desc, el, icpList){
+  icpList = icpList || [icpId];
   const fit=r.icp_fit_score||0;
   const bc=fit>=75?'badge-g':fit>=50?'badge-a':'badge-r';
   const bl=fit>=75?'Good fit':fit>=50?'Partial fit':'Poor fit';
   const scoreVals=Object.values(r.scores||{}).filter(v=>typeof v==='number');
   const avg=scoreVals.length?Math.round(scoreVals.reduce((a,b)=>a+b,0)/scoreVals.length):0;
 
+  // Build ICP pills — one per ICP in the list
+  const icpPills=icpList.map(id=>{
+    const o=ICPS[id]||{name:id,color:'#555',light:'#f5f5f5'};
+    return `<span style="display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:99px;background:${o.light};border:1px solid ${o.color}40;">
+      <span style="width:7px;height:7px;border-radius:50%;background:${o.color};display:inline-block;"></span>
+      <span style="font-size:12px;font-weight:700;color:${o.color};">${o.name}</span>
+    </span>`;
+  }).join('');
+  const icpLabel=icpList.length>1?'Reviewed for all ICPs':'Reviewed as';
+
   el.innerHTML=`
     <div class="divider"></div>
     <div class="verdict-card">
-      <div style="display:inline-flex;align-items:center;gap:8px;padding:5px 12px;border-radius:99px;background:${icp.light};margin-bottom:10px;">
-        <span style="width:8px;height:8px;border-radius:50%;background:${icp.color};display:inline-block;"></span>
-        <span style="font-size:12px;font-weight:700;color:${icp.color};">Reviewed as: ${icp.name}${desc?' · '+desc:''}</span>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+        <span style="font-size:11px;font-weight:600;color:var(--muted);">${icpLabel}:</span>
+        ${icpPills}
+        ${desc?`<span style="font-size:11px;color:var(--muted);">· ${desc}</span>`:''}
       </div>
       <div style="display:flex;align-items:baseline;gap:20px;margin-bottom:8px;flex-wrap:wrap;">
         <div><div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;">ICP Fit</div>
@@ -640,47 +662,7 @@ function renderSingle(r, icpId, desc, el){
     </div>`;
 }
 
-function renderMulti(r, icpList, desc, el){
-  let activeIcp=icpList[0];
-  const tabs=icpList.map(id=>{
-    const icp=ICPS[id]||{name:id,color:'#555',light:'#f5f5f5'};
-    return `<span class="icp-tab ${id===activeIcp?'active':''}" data-icp="${id}" style="color:${icp.color};border-color:${icp.color};background:${id===activeIcp?icp.light:'transparent'};" onclick="switchIcpTab(this,'${id}')">${icp.name}</span>`;
-  }).join('');
-
-  const panelsHtml=icpList.map(id=>{
-    const icp=ICPS[id]||{name:id,color:'#555',light:'#f5f5f5'};
-    const d=r.per_icp?.[id]||{};
-    const fit=d.icp_fit_score||0;
-    const bc=fit>=75?'badge-g':fit>=50?'badge-a':'badge-r';
-    const bl=fit>=75?'Good fit':fit>=50?'Partial fit':'Poor fit';
-    const scoreVals=Object.values(d.scores||{}).filter(v=>typeof v==='number');
-    const avg=scoreVals.length?Math.round(scoreVals.reduce((a,b)=>a+b,0)/scoreVals.length):0;
-    return `<div class="icp-panel" id="panel-${id}" style="display:${id===activeIcp?'block':'none'};">
-      <div style="display:flex;align-items:baseline;gap:20px;margin-bottom:8px;flex-wrap:wrap;padding:10px 0;">
-        <div><div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;">ICP Fit</div>
-          <span class="score-big">${fit}<span>/100</span></span><span class="badge ${bc}">${bl}</span></div>
-        <div><div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;">Avg All Dims</div>
-          <span class="score-big" style="font-size:22px;">${avg}<span>/100</span></span></div>
-      </div>
-      <div class="verdict-text" style="margin-bottom:1rem;">"${d.overall_verdict||''}"</div>
-      <div style="font-size:11px;color:var(--faint);margin-bottom:0.75rem;">Click any dimension to expand</div>
-      ${buildDimBlocks(d.scores||{},d.score_suggestions||{})}
-      <div style="margin-top:1rem;">${buildCritiques(d.devil_advocate_critiques||[])}</div>
-      <div class="two-col" style="margin-top:1rem;">
-        <div class="summary-box" style="background:var(--green-l);color:#173404;"><span class="slbl" style="color:var(--green);">Strongest</span>${d.strongest_aspect||''}</div>
-        <div class="summary-box" style="background:var(--red-l);color:#3d0f0f;"><span class="slbl" style="color:var(--red);">Biggest risk</span>${d.biggest_risk||''}</div>
-      </div>
-    </div>`;
-  }).join('');
-
-  el.innerHTML=`
-    <div class="divider"></div>
-    <div class="card" style="margin-bottom:0.5rem;">
-      <div style="font-size:13px;color:var(--muted);margin-bottom:10px;">${r.overall_summary||''}</div>
-      <div class="icp-tabs" id="icpTabsRow">${tabs}</div>
-      ${panelsHtml}
-    </div>`;
-}
+// renderMulti removed — unified single review used
 
 function switchIcpTab(el, icpId){
   document.querySelectorAll('.icp-tab').forEach(t=>{
@@ -711,6 +693,7 @@ function buildDimBlocks(scores, suggs){
           </div>
           ${s.what_is_wrong?`<div class="sc-what">⚠ ${s.what_is_wrong}</div>`:''}
           <div class="sc-body" style="border-left-color:${d.color};">💡 ${s.suggestion||''}</div>
+          ${s.icps_benefited?`<div style="padding:0 14px 6px;font-size:11px;color:var(--muted);">Benefits: ${s.icps_benefited}</div>`:''}
           ${s.example_statement?`<div class="sc-example"><div class="sc-example-inner" style="background:${d.light};border-color:${d.color};color:${d.dark};">✏️ <strong>Add this:</strong> "${s.example_statement}"</div></div>`:''}
         </div>`).join('');
       html+=`<div class="dim-block" style="border-color:${d.color}40;">
@@ -742,12 +725,14 @@ function buildCritiques(critiques){
     const obj=typeof c==='object'?c:{dimension:'general',critique:c};
     const sev=CRITIQUE_SEV[obj.dimension]||'medium';
     const dim=DIMS[obj.dimension]||{label:obj.dimension||'General',color:'#888',light:'#f5f5f5'};
+    const icpObj=obj.icp?ICPS[obj.icp]:null;
     const sevBg=sev==='high'?'#FCEBEB':sev==='medium'?'#FAEEDA':'#F5F5F5';
     const sevBorder=sev==='high'?'#E24B4A':sev==='medium'?'#C97B20':'#999';
     const sevText=sev==='high'?'#3d0f0f':sev==='medium'?'#5C3200':'#333';
     const tag=sev==='high'?`<span style="padding:2px 7px;border-radius:4px;background:#E24B4A;color:#fff;font-size:10px;font-weight:700;">HIGH</span>`:sev==='medium'?`<span style="padding:2px 7px;border-radius:4px;background:#C97B20;color:#fff;font-size:10px;font-weight:700;">MED</span>`:`<span style="padding:2px 7px;border-radius:4px;background:#888;color:#fff;font-size:10px;font-weight:700;">LOW</span>`;
+    const icpTag=icpObj?`<span style="padding:2px 8px;border-radius:4px;background:${icpObj.light};color:${icpObj.color};font-size:11px;font-weight:600;">👤 ${icpObj.name}</span>`:'';
     return `<div class="critique-card" style="background:${sevBg};border-left:3px solid ${sevBorder};margin-bottom:8px;">
-      <div class="cc-head" style="background:${sevBg};color:${sevText};">${tag}<span style="padding:2px 8px;border-radius:4px;background:${dim.light};color:${dim.color};font-size:11px;font-weight:600;">${dim.label}</span></div>
+      <div class="cc-head" style="background:${sevBg};color:${sevText};">${tag}<span style="padding:2px 8px;border-radius:4px;background:${dim.light};color:${dim.color};font-size:11px;font-weight:600;">${dim.label}</span>${icpTag}</div>
       <div class="cc-body" style="color:${sevText};">${obj.critique||c}</div>
     </div>`;
   }).join('');
