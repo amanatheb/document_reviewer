@@ -121,7 +121,7 @@ input[type="file"]{display:none;}
 </head>
 <body>
 <div class="page">
-  <h1>ICP Document Reviewer</h1>
+  <h1>Document Reviewer</h1>
   <p class="subtitle">Upload a doc or paste a URL — scored against all major content quality dimensions</p>
 
   <div class="how-box">
@@ -405,23 +405,48 @@ Replace "reason here" with one sentence explaining why.`;
   }
 }
 
+/* ── Resolve text description to a known ICP id ────────────────────────────── */
+function resolveDescToICP(desc){
+  const d = desc.toLowerCase();
+  if(d.includes('developer')||d.includes('engineer')||d.includes('cto')||d.includes('technical')||d.includes('dev ')||d.includes(' dev')||d.includes('coding')||d.includes('programmer')) return 'developer';
+  if(d.includes('marketer')||d.includes('marketing')||d.includes('growth')||d.includes('seo')||d.includes('content')||d.includes('campaign')||d.includes('brand')) return 'marketer';
+  if(d.includes('agency')||d.includes('client')||d.includes('retainer')||d.includes('white-label')||d.includes('account manager')) return 'agency';
+  if(d.includes('founder')||d.includes('startup')||d.includes('entrepreneur')||d.includes('bootstrapp')||d.includes('mvp')) return 'founder';
+  return null; // custom description — not a known ICP, used as refinement only
+}
+
 /* ── ICP Decision Logic ─────────────────────────────────────────────────────── */
 function handleICPDecision(detected, reason){
   const userICPs=[...selectedICPs];
   const desc=(document.getElementById('icpDesc').value||'').trim();
 
-  // No user selection — just analyze with detected
-  if(userICPs.length===0){
+  // If desc text is provided, it is treated as an equal ICP input alongside chips.
+  // We resolve desc to a known ICP id if it matches, otherwise keep as custom description.
+  const descIcpId = desc ? resolveDescToICP(desc) : null;
+  // Merge chip selections + desc-resolved ICP (deduped)
+  const allUserICPs = descIcpId
+    ? [...new Set([...userICPs, descIcpId])]
+    : userICPs;
+
+  // No user selection and no desc — just analyze with detected
+  if(allUserICPs.length===0 && !desc){
     confirmedICPs=[detected];
     runFullAnalysis([detected], desc);
     return;
   }
 
-  const userHasDetected=userICPs.includes(detected);
-  const otherUserICPs=userICPs.filter(id=>id!==detected);
+  // Only desc provided (no chips) and it doesn't match a known ICP — treat as refinement of detected
+  if(allUserICPs.length===0 && desc){
+    confirmedICPs=[detected];
+    runFullAnalysis([detected], desc);
+    return;
+  }
+
+  const userHasDetected=allUserICPs.includes(detected);
+  const otherUserICPs=allUserICPs.filter(id=>id!==detected);
 
   // All user selections match detected — no conflict
-  if(userICPs.length===1 && userHasDetected){
+  if(allUserICPs.length===1 && userHasDetected){
     confirmedICPs=[detected];
     runFullAnalysis([detected], desc);
     return;
@@ -438,7 +463,7 @@ function handleICPDecision(detected, reason){
 
   if(!userHasDetected){
     // Complete mismatch: user picked X but doc signals Y
-    const userNames=userICPs.map(id=>ICPS[id]?.name||id).join(', ');
+    const userNames=allUserICPs.map(id=>ICPS[id]?.name||id).join(', ');
     sub.innerHTML=`The document signals suggest <strong style="color:${detectedObj?.color}">${detectedObj?.name||detected}</strong> as the primary ICP (${reason}), but you selected <strong>${userNames}</strong>.`;
     opts.innerHTML=`
       <label class="icp-opt" onclick="selectOpt(this,'detected')">
@@ -453,7 +478,7 @@ function handleICPDecision(detected, reason){
       </label>
       <label class="icp-opt" onclick="selectOpt(this,'both')">
         <input type="radio" name="icpChoice" value="both"/>
-        <div><div class="icp-opt-label">Review for all ICPs (${[detected,...userICPs].filter((v,i,a)=>a.indexOf(v)===i).map(id=>ICPS[id]?.name||id).join(', ')})</div>
+        <div><div class="icp-opt-label">Review for all ICPs (${[detected,...allUserICPs].filter((v,i,a)=>a.indexOf(v)===i).map(id=>ICPS[id]?.name||id).join(', ')})</div>
         <div class="icp-opt-desc">Get a separate score and suggestions for each ICP with a comparison view.</div></div>
       </label>`;
   } else {
@@ -468,7 +493,7 @@ function handleICPDecision(detected, reason){
       </label>
       <label class="icp-opt" onclick="selectOpt(this,'both')">
         <input type="radio" name="icpChoice" value="both"/>
-        <div><div class="icp-opt-label">Include all selected ICPs (${userICPs.map(id=>ICPS[id]?.name||id).join(', ')})</div>
+        <div><div class="icp-opt-label">Include all selected ICPs (${allUserICPs.map(id=>ICPS[id]?.name||id).join(', ')})</div>
         <div class="icp-opt-desc">Review for ${detectedObj?.name} + ${otherNames}. Shows how the doc performs for each audience.</div></div>
       </label>`;
   }
@@ -488,9 +513,13 @@ function confirmAndAnalyze(){
   const desc=(document.getElementById('icpDesc').value||'').trim();
   document.getElementById('icpConfirmBox').style.display='none';
 
+  const _userICPs=[...selectedICPs];
+  const _desc=(document.getElementById('icpDesc').value||'').trim();
+  const _descId=_desc?resolveDescToICP(_desc):null;
+  const _allUser=_descId?[...new Set([..._userICPs,_descId])]:_userICPs;
   if(val==='detected') confirmedICPs=[detectedICP];
-  else if(val==='user') confirmedICPs=userICPs.length?userICPs:[detectedICP];
-  else confirmedICPs=[detectedICP,...userICPs].filter((v,i,a)=>a.indexOf(v)===i);
+  else if(val==='user') confirmedICPs=_allUser.length?_allUser:[detectedICP];
+  else confirmedICPs=[detectedICP,..._allUser].filter((v,i,a)=>a.indexOf(v)===i);
 
   runFullAnalysis(confirmedICPs, desc);
 }
@@ -505,7 +534,8 @@ async function runFullAnalysis(icpList, desc){
   const truncated=docText.length>12000?docText.slice(0,12000)+'[...truncated]':docText;
   const icpDetails=icpList.map(id=>{
     const v=ICPS[id];
-    return `${id}${desc&&icpList.length===1?` (described as: "${desc}")`:''}: ${v?.signals||''}`;
+    // Always include desc as a refinement for all ICPs — it's equal input, not just a hint
+    return `${id}${desc?` (target audience described as: "${desc}")`:''}: ${v?.signals||''}`;
   }).join('\n');
 
   const dimList=Object.values(DIM_GROUPS).flatMap(g=>g.dims).map(d=>`- ${d.k}: ${d.label} — ${d.what}`).join('\n');
