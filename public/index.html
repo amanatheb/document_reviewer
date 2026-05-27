@@ -121,7 +121,7 @@ input[type="file"]{display:none;}
 </head>
 <body>
 <div class="page">
-  <h1>Document Reviewer</h1>
+  <h1>ICP Document Reviewer</h1>
   <p class="subtitle">Upload a doc or paste a URL — scored against all major content quality dimensions</p>
 
   <div class="how-box">
@@ -382,16 +382,22 @@ Rules:
 - Do NOT default to founder unless clearly justified.
 - If developer/marketer/agency signals exist, pick those.
 
-Respond with ONLY:
-{"detected_icp":"developer|marketer|agency|founder","reason":"one sentence citing specific signals from the document"}`;
+You MUST respond with ONLY this exact JSON structure and nothing else:
+{"detected_icp":"developer","reason":"reason here"}
+
+Replace "developer" with the correct ICP from: developer, marketer, agency, founder.
+Replace "reason here" with one sentence explaining why.`;
 
   try{
     const res=await fetch('/api/review',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:detectPrompt})});
     const data=await res.json();
     if(!res.ok) throw new Error(data.error||'Server error');
     hideProc();
-    detectedICP=data.result.detected_icp||'founder';
-    const reason=data.result.reason||'';
+    // Handle both {detected_icp:...} and nested structures
+    const dr = data.result || {};
+    detectedICP = dr.detected_icp || dr.detectedIcp || dr.icp || 'founder';
+    const reason = dr.reason || dr.detected_icp_reason || '';
+    console.log('Detected ICP:', detectedICP, 'Reason:', reason);
     handleICPDecision(detectedICP, reason);
   }catch(e){
     hideProc();showError('Detection failed: '+e.message);
@@ -538,7 +544,9 @@ ${desc?`ICP DESCRIPTION: "${desc}" — use this to refine the analysis specifica
 DOCUMENT:
 ${doc}
 
-Score each dimension 0-100 (be harsh). For each give 1-2 suggestions with: exact section name, what is wrong, a specific fix, which ICPs benefit from this fix (icps_benefited field), and a copy-paste example statement.
+Score each dimension 0-100 (be harsh — most docs score 30-70, not 0 or 100). 
+IMPORTANT: Every score in the "scores" object MUST be an integer between 1 and 99. Do NOT leave any score as 0.
+For each dimension give 1-2 suggestions with: exact section name, what is wrong, a specific fix, which ICPs benefit (icps_benefited), and a copy-paste example statement.
 Write 4 devil's advocate critiques.
 
 DIMENSIONS TO SCORE:
@@ -681,7 +689,7 @@ function buildDimBlocks(scores, suggs){
   DIM_GROUPS.forEach(g=>{
     html+=`<div class="cat-head">${g.cat}</div>`;
     g.dims.forEach(d=>{
-      const v=typeof scores[d.k]==='number'?scores[d.k]:0;
+      const rawV=scores[d.k]; const v=typeof rawV==='number'?rawV:(typeof rawV==='string'?parseInt(rawV)||0:0);
       const dimSuggs=suggs[d.k]||[];
       const uid=d.k+'_'+Math.random().toString(36).slice(2,7);
       const suggHtml=dimSuggs.map(s=>`
