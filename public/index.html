@@ -21,18 +21,15 @@ h1{font-size:22px;font-weight:600;margin-bottom:4px;}
 .card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--rl);padding:1.25rem 1.5rem;margin-bottom:1.25rem;}
 .lbl{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px;display:block;}
 .how-box{background:var(--blue-l);border:0.5px solid #B5D4F4;border-radius:var(--rl);padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:13px;color:#0C447C;line-height:1.75;}
-/* tabs */
 .tab-row{display:flex;border:0.5px solid var(--border-med);border-radius:var(--r);overflow:hidden;margin-bottom:1rem;}
 .tab-btn{flex:1;padding:10px;font-size:13px;font-weight:500;background:#f5f4f1;color:var(--muted);border:none;cursor:pointer;transition:all 0.14s;}
 .tab-btn.active{background:var(--text);color:#fff;}
 .tab-btn:first-child{border-right:0.5px solid var(--border-med);}
-/* drop zone */
 .drop-zone{border:1.5px dashed var(--border-med);border-radius:var(--rl);padding:2rem;text-align:center;cursor:pointer;background:#fafaf8;transition:all 0.14s;}
 .drop-zone:hover,.drop-zone.over{border-color:var(--blue);background:var(--blue-l);}
-.drop-zone .dz-icon{font-size:28px;color:var(--muted);margin-bottom:6px;}
-.drop-zone .dz-main{font-size:14px;color:var(--muted);}
-.drop-zone .dz-hint{font-size:12px;color:var(--faint);margin-top:4px;}
-/* url */
+.dz-icon{font-size:28px;color:var(--muted);margin-bottom:6px;}
+.dz-main{font-size:14px;color:var(--muted);}
+.dz-hint{font-size:12px;color:var(--faint);margin-top:4px;}
 .url-row{display:flex;gap:8px;}
 .url-inp{flex:1;padding:10px 14px;border:0.5px solid var(--border-med);border-radius:var(--r);font-size:14px;font-family:inherit;background:var(--surface);color:var(--text);outline:none;transition:border-color 0.14s;}
 .url-inp:focus{border-color:var(--blue);}
@@ -40,34 +37,44 @@ h1{font-size:22px;font-weight:600;margin-bottom:4px;}
 .url-btn:hover{opacity:0.88;}
 .url-btn:disabled{opacity:0.4;cursor:not-allowed;}
 .url-hint{font-size:12px;color:var(--faint);margin-top:6px;}
-/* file pill */
 .file-pill{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#f0f0ed;border-radius:var(--r);margin-top:10px;}
 .file-pill .fname{font-size:13px;font-weight:500;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .file-pill .rm{cursor:pointer;color:var(--muted);font-size:20px;line-height:1;flex-shrink:0;}
 .file-pill .rm:hover{color:var(--red);}
-/* processing */
 .processing{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--blue-l);border-radius:var(--r);font-size:13px;color:var(--blue);margin-top:10px;}
 .spinner{width:15px;height:15px;border:2px solid #B5D4F4;border-top-color:var(--blue);border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .preview-wrap{margin-top:10px;}
 textarea{width:100%;padding:10px 14px;border:0.5px solid var(--border-med);border-radius:var(--r);font-size:14px;font-family:inherit;background:var(--surface);color:var(--text);resize:vertical;outline:none;}
-/* ICP section */
 .icp-section{margin-top:1rem;padding-top:1rem;border-top:0.5px solid var(--border);}
-.icp-multi-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.icp-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
 .icp-chip{padding:5px 14px;border-radius:99px;font-size:13px;font-weight:500;border:1.5px solid var(--border-med);background:var(--surface);color:var(--muted);cursor:pointer;transition:all 0.14s;user-select:none;}
 .icp-chip:hover{border-color:var(--blue);color:var(--blue);}
-.icp-chip.selected{background:var(--blue);color:#fff;border-color:var(--blue);}
-.icp-hint-inp{width:100%;padding:10px 14px;border:0.5px solid var(--border-med);border-radius:var(--r);font-size:14px;font-family:inherit;background:var(--surface);color:var(--text);outline:none;transition:border-color 0.14s;margin-top:4px;}
-.icp-hint-inp:focus{border-color:var(--blue);}
-/* btn */
+.icp-chip.sel{color:#fff;border-color:transparent;}
+.icp-desc-inp{width:100%;padding:9px 14px;border:0.5px solid var(--border-med);border-radius:var(--r);font-size:13px;font-family:inherit;background:var(--surface);color:var(--text);outline:none;transition:border-color 0.14s;margin-top:6px;}
+.icp-desc-inp:focus{border-color:var(--blue);}
 .btn{width:100%;padding:13px;border-radius:var(--r);border:none;background:#111;color:#fff;font-size:15px;font-weight:500;cursor:pointer;transition:opacity 0.14s;margin-top:0.5rem;}
 .btn:hover{opacity:0.85;}
 .btn:disabled{opacity:0.38;cursor:not-allowed;}
-/* alerts */
+.btn-sm{padding:8px 18px;border-radius:var(--r);border:none;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.14s;}
+.btn-primary{background:var(--blue);color:#fff;}
+.btn-primary:hover{opacity:0.88;}
+.btn-outline{background:var(--surface);color:var(--text);border:1px solid var(--border-med);}
+.btn-outline:hover{background:#f0f0ed;}
 .error{padding:12px 14px;background:var(--red-l);border-radius:var(--r);font-size:13px;color:var(--red);margin-top:10px;}
 .warn{padding:12px 14px;background:var(--amber-l);border-radius:var(--r);font-size:13px;color:var(--amber);margin-top:8px;}
-.mismatch-banner{padding:10px 14px;background:#FFF8E6;border:0.5px solid #E8C84A;border-radius:var(--r);font-size:13px;color:#5C4200;margin-bottom:12px;line-height:1.6;}
-/* results */
+/* ICP Confirmation Dialog */
+.icp-confirm{background:var(--surface);border:1.5px solid #E8C84A;border-radius:var(--rl);padding:1.25rem 1.5rem;margin-top:1rem;}
+.icp-confirm-title{font-size:15px;font-weight:600;margin-bottom:4px;}
+.icp-confirm-sub{font-size:13px;color:var(--muted);margin-bottom:1rem;}
+.icp-confirm-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;}
+.icp-opt{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:var(--r);border:1.5px solid var(--border);cursor:pointer;transition:all 0.14s;}
+.icp-opt:hover{border-color:var(--blue);background:var(--blue-l);}
+.icp-opt.chosen{border-color:var(--blue);background:var(--blue-l);}
+.icp-opt input[type=radio]{margin-top:3px;flex-shrink:0;accent-color:var(--blue);}
+.icp-opt-label{font-size:13px;font-weight:500;}
+.icp-opt-desc{font-size:12px;color:var(--muted);margin-top:2px;}
+/* Dimension results */
 .divider{height:0.5px;background:var(--border);margin:1.25rem 0;}
 .verdict-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--rl);padding:1.25rem 1.5rem;margin-bottom:1.25rem;}
 .score-big{font-size:28px;font-weight:600;}
@@ -77,47 +84,48 @@ textarea{width:100%;padding:10px 14px;border:0.5px solid var(--border-med);borde
 .badge-a{background:var(--amber-l);color:var(--amber);}
 .badge-r{background:var(--red-l);color:var(--red);}
 .verdict-text{font-size:14px;color:var(--muted);font-style:italic;margin-top:8px;}
-/* dimension blocks */
-.dim-block{margin-bottom:1rem;border-radius:var(--r);overflow:hidden;border:1px solid var(--border);}
-.dim-header{display:flex;align-items:center;gap:10px;padding:10px 14px;}
-.dim-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+/* ICP tab switcher in results */
+.icp-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;}
+.icp-tab{padding:5px 14px;border-radius:99px;font-size:12px;font-weight:600;border:1.5px solid;cursor:pointer;transition:all 0.14s;opacity:0.5;}
+.icp-tab.active{opacity:1;}
+/* Dim category header */
+.cat-head{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin:1rem 0 6px;padding:0 2px;}
+.dim-block{margin-bottom:0.75rem;border-radius:var(--r);overflow:hidden;border:1px solid var(--border);}
+.dim-header{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;}
+.dim-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
 .dim-title{font-size:13px;font-weight:700;flex:1;}
-.dim-std{font-size:10px;font-weight:500;padding:2px 7px;border-radius:4px;background:rgba(0,0,0,0.06);color:var(--muted);margin-left:4px;}
-.dim-bar{flex:1;height:5px;border-radius:99px;overflow:hidden;max-width:90px;background:rgba(0,0,0,0.08);}
+.dim-cat-tag{font-size:10px;font-weight:500;padding:2px 7px;border-radius:4px;background:rgba(0,0,0,0.06);color:var(--muted);}
+.dim-bar{flex:1;height:5px;border-radius:99px;overflow:hidden;max-width:80px;background:rgba(0,0,0,0.08);}
 .dim-fill{height:100%;border-radius:99px;}
 .dim-score{font-size:13px;font-weight:700;min-width:44px;text-align:right;}
-/* suggestion cards */
+.dim-chevron{font-size:12px;color:var(--muted);transition:transform 0.2s;}
+.dim-body{display:none;}
+.dim-body.open{display:block;}
 .suggestion-card{background:var(--surface);border-bottom:0.5px solid var(--border);}
 .suggestion-card:last-child{border-bottom:none;}
 .sc-header{display:flex;align-items:center;gap:7px;padding:7px 14px;font-size:11px;font-weight:600;border-top:0.5px solid var(--border);}
 .sc-section{padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500;background:rgba(0,0,0,0.06);}
 .sc-what{padding:8px 14px 4px;font-size:12px;color:var(--muted);font-style:italic;}
-.sc-body{padding:4px 14px 8px;font-size:13px;color:var(--text);line-height:1.65;border-left:3px solid transparent;}
+.sc-body{padding:4px 14px 8px;font-size:13px;line-height:1.65;border-left:3px solid transparent;}
 .sc-example{padding:4px 14px 12px;font-size:12px;line-height:1.6;}
 .sc-example-inner{padding:8px 12px;border-radius:var(--r);border-left:3px solid;font-family:inherit;}
-/* critique */
 .critique-card{border-radius:var(--r);margin-bottom:8px;overflow:hidden;}
 .cc-head{display:flex;align-items:center;gap:8px;padding:8px 12px;font-size:11px;font-weight:700;border-bottom:0.5px solid rgba(0,0,0,0.08);}
 .cc-body{padding:8px 14px 12px;font-size:13px;line-height:1.65;}
-/* summary */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:1rem;}
 .summary-box{padding:14px 16px;border-radius:var(--r);font-size:13px;line-height:1.55;}
-.summary-box .slbl{font-weight:600;margin-bottom:5px;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;}
+.slbl{font-weight:600;margin-bottom:5px;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;display:block;}
 .section-head{font-size:13px;font-weight:600;margin-bottom:12px;}
-/* icp per-result tabs */
-.icp-result-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem;}
-.icp-rtab{padding:5px 14px;border-radius:99px;font-size:12px;font-weight:600;border:1.5px solid;cursor:pointer;transition:all 0.14s;opacity:0.55;}
-.icp-rtab.active{opacity:1;}
 input[type="file"]{display:none;}
 </style>
 </head>
 <body>
 <div class="page">
   <h1>ICP Document Reviewer</h1>
-  <p class="subtitle">Upload a doc or paste a URL — instant devil's advocate review against industry standards</p>
+  <p class="subtitle">Upload a doc or paste a URL — scored against all major content quality dimensions</p>
 
   <div class="how-box">
-    <strong>How it works:</strong> Add your document → optionally select one or more target ICPs → click Analyze. The system auto-detects the primary ICP from the doc, scores across all industry-standard dimensions, and gives copy-paste ready suggestions.
+    <strong>How it works:</strong> Add your document → optionally select target ICPs → click Detect ICP. The system detects the ICP from the doc, confirms with you if there's a mismatch, then scores across all dimensions with copy-paste suggestions.
   </div>
 
   <div class="card">
@@ -125,7 +133,6 @@ input[type="file"]{display:none;}
       <button class="tab-btn active" id="tabFile" onclick="switchTab('file')">📁 Upload File</button>
       <button class="tab-btn" id="tabUrl" onclick="switchTab('url')">🔗 Paste URL</button>
     </div>
-
     <div id="fileTab">
       <input type="file" id="fileInput" accept=".txt,.md,.html,.csv,.pdf,.png,.jpg,.jpeg"/>
       <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
@@ -134,15 +141,13 @@ input[type="file"]{display:none;}
         <div class="dz-hint">PDF (text extracted), plain text, markdown, or image</div>
       </div>
     </div>
-
     <div id="urlTab" style="display:none;">
       <div class="url-row">
         <input class="url-inp" type="text" id="urlInput" placeholder="https://… any public webpage, blog post, landing page"/>
         <button class="url-btn" id="fetchBtn" onclick="fetchURL()">Fetch</button>
       </div>
-      <div class="url-hint">Works with public webpages, published Google Docs, public Notion pages, landing pages</div>
+      <div class="url-hint">Works with public webpages, published Google Docs, public Notion pages</div>
     </div>
-
     <div id="processingMsg" style="display:none;" class="processing">
       <div class="spinner"></div><span id="processingText">Processing…</span>
     </div>
@@ -153,70 +158,99 @@ input[type="file"]{display:none;}
     </div>
     <div id="previewWrap" style="display:none;" class="preview-wrap">
       <div class="lbl">Content preview</div>
-      <textarea id="previewText" rows="4" style="font-size:12px;color:var(--muted);"></textarea>
+      <textarea id="previewText" rows="3" style="font-size:12px;color:var(--muted);"></textarea>
     </div>
     <div id="warnBar" style="display:none;" class="warn"></div>
 
     <!-- ICP MULTI-SELECT -->
     <div class="icp-section">
-      <span class="lbl">Target ICPs <span style="font-weight:400;color:var(--faint);">(select one or more — system also auto-detects from doc)</span></span>
-      <div class="icp-multi-chips" id="icpChips">
+      <span class="lbl">Your target ICPs <span style="font-weight:400;color:var(--faint);">(optional — select one or more)</span></span>
+      <div class="icp-chips" id="icpChips">
         <span class="icp-chip" data-icp="developer" onclick="toggleChip(this)">👨‍💻 Developer</span>
         <span class="icp-chip" data-icp="marketer"  onclick="toggleChip(this)">📣 Marketer</span>
         <span class="icp-chip" data-icp="agency"    onclick="toggleChip(this)">🏢 Agency</span>
         <span class="icp-chip" data-icp="founder"   onclick="toggleChip(this)">🚀 Founder</span>
       </div>
-      <input class="icp-hint-inp" type="text" id="icpHint" placeholder="Describe further (optional): e.g. WordPress developer, B2B SaaS marketer, boutique design agency…"/>
-      <div style="font-size:11px;color:var(--faint);margin-top:5px;">If your selection matches the auto-detected ICP, your description refines the analysis. Multiple selections = review covers all chosen ICPs.</div>
+      <input class="icp-desc-inp" type="text" id="icpDesc" placeholder="Describe further (optional): e.g. WordPress developer, B2B SaaS marketer…"/>
     </div>
   </div>
 
-  <button class="btn" id="analyzeBtn" disabled onclick="analyze()">Analyze →</button>
+  <button class="btn" id="detectBtn" disabled onclick="detectICP()">Detect ICP & Analyze →</button>
   <div id="errorBar" style="display:none;" class="error"></div>
+
+  <!-- ICP CONFIRMATION DIALOG -->
+  <div id="icpConfirmBox" style="display:none;" class="icp-confirm">
+    <div class="icp-confirm-title">⚡ ICP Mismatch Detected</div>
+    <div class="icp-confirm-sub" id="icpConfirmSub"></div>
+    <div class="icp-confirm-opts" id="icpConfirmOpts"></div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn-sm btn-primary" onclick="confirmAndAnalyze()">Analyze with selected →</button>
+      <button class="btn-sm btn-outline" onclick="dismissConfirm()">Cancel</button>
+    </div>
+  </div>
+
   <div id="results" style="margin-top:1.5rem;"></div>
 </div>
 
 <script>
 pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-const ICPS=[
-  {id:'developer',name:'Developer',color:'#185FA5',light:'#E6F1FB',signals:'APIs, SDKs, code, GitHub, CI/CD, engineering, infrastructure, docs, open source, technical integration'},
-  {id:'marketer', name:'Marketer', color:'#0E7C5B',light:'#E2F4EE',signals:'campaigns, leads, conversions, SEO, content, email, attribution, HubSpot, analytics, brand, demand gen'},
-  {id:'agency',   name:'Agency',   color:'#6B3FA0',light:'#F0EAF9',signals:'client work, retainers, deliverables, white-label, multiple accounts, account management, client reporting'},
-  {id:'founder',  name:'Founder',  color:'#B05C10',light:'#FAEEDA',signals:'MVP, fundraising, product-market fit, bootstrapping, early customers, startup, building a product'},
-];
-
-// All industry-standard dimensions with category tags
-const DIMS={
-  // Core ICP & Messaging
-  messaging_clarity:    {label:'Messaging Clarity',      cat:'Messaging',       color:'#185FA5',light:'#E6F1FB',dark:'#0C447C', std:'Content Marketing Institute'},
-  icp_alignment:        {label:'ICP Alignment',          cat:'Audience',        color:'#6B3FA0',light:'#F0EAF9',dark:'#3D1A6E', std:'SiriusDecisions'},
-  value_proposition:    {label:'Value Proposition',      cat:'Positioning',     color:'#B05C10',light:'#FAEEDA',dark:'#6B3600', std:'Geoffrey Moore / Crossing the Chasm'},
-  tone_and_language:    {label:'Tone & Language',        cat:'Voice',           color:'#0E7C5B',light:'#E2F4EE',dark:'#0A4F3A', std:'Nielsen Norman Group'},
-  structure_and_ia:     {label:'Structure & IA',         cat:'UX Writing',      color:'#1F4D8C',light:'#E8EEF9',dark:'#0D2D5E', std:'Nielsen Norman Group'},
-  // Industry standards
-  readability:          {label:'Readability',            cat:'Accessibility',   color:'#7B3D8C',light:'#F5EAF9',dark:'#4A1A5E', std:'Flesch-Kincaid / Hemingway'},
-  seo_discoverability:  {label:'SEO & Discoverability',  cat:'Findability',     color:'#1A7A3C',light:'#E3F5EB',dark:'#0A4020', std:'Google Search Quality Guidelines'},
-  credibility_trust:    {label:'Credibility & Trust',    cat:'Trust Signals',   color:'#8B4513',light:'#FAEEE6',dark:'#5C2A00', std:'E-E-A-T (Google) / Nielsen Trust'},
-  cta_conversion:       {label:'CTA & Conversion',       cat:'Conversion',      color:'#C0392B',light:'#FDECEB',dark:'#7B1A14', std:'CXL / Unbounce Conversion'},
-  accessibility_incl:   {label:'Accessibility & Inclusion',cat:'Inclusion',     color:'#2E6DA4',light:'#E8F2FA',dark:'#1A3D66', std:'WCAG 2.1 / Plain Language Act'},
-  originality:          {label:'Originality & POV',      cat:'Differentiation', color:'#9B59B6',light:'#F5EEF8',dark:'#5B2C6F', std:'Content Marketing Institute'},
-  accuracy_facts:       {label:'Accuracy & Fact Density',cat:'Credibility',     color:'#1A5276',light:'#EAF2F8',dark:'#0E2D42', std:'Reuters/AP Editorial Standards'},
+const ICPS={
+  developer:{name:'Developer',color:'#185FA5',light:'#E6F1FB',signals:'APIs, SDKs, code, GitHub, CI/CD, engineering, infrastructure, technical integration, open source'},
+  marketer: {name:'Marketer', color:'#0E7C5B',light:'#E2F4EE',signals:'campaigns, leads, conversions, SEO, content, email marketing, attribution, analytics, brand, demand gen'},
+  agency:   {name:'Agency',   color:'#6B3FA0',light:'#F0EAF9',signals:'client work, retainers, deliverables, white-label, multiple accounts, account management, client reporting'},
+  founder:  {name:'Founder',  color:'#B05C10',light:'#FAEEDA',signals:'MVP, fundraising, product-market fit, bootstrapping, early customers, startup, building a product'},
 };
 
-const CRITIQUE_SEV={icp_alignment:'high',value_proposition:'high',cta_conversion:'high',messaging_clarity:'medium',tone_and_language:'medium',structure_and_ia:'medium',readability:'medium',seo_discoverability:'medium',credibility_trust:'medium',accessibility_incl:'low',originality:'medium',accuracy_facts:'high'};
+// All dimensions grouped by category — no external brand names shown
+const DIM_GROUPS=[
+  {cat:'Core Messaging',dims:[
+    {k:'messaging_clarity',  label:'Messaging Clarity',     color:'#185FA5',light:'#E6F1FB',dark:'#0C447C',   what:'Is the core message immediately clear to this ICP within 5 seconds of reading?'},
+    {k:'value_proposition',  label:'Value Proposition',     color:'#B05C10',light:'#FAEEDA',dark:'#6B3600',   what:'Is the value clear, specific, quantified, and compelling for this ICP?'},
+    {k:'icp_alignment',      label:'ICP Alignment',         color:'#6B3FA0',light:'#F0EAF9',dark:'#3D1A6E',   what:'Does the content speak directly to this ICP\'s specific pain points, goals, and language?'},
+  ]},
+  {cat:'Voice & Style',dims:[
+    {k:'tone_and_language',  label:'Tone & Language',       color:'#0E7C5B',light:'#E2F4EE',dark:'#0A4F3A',   what:'Does vocabulary, formality, and style match how this ICP thinks and communicates?'},
+    {k:'readability',        label:'Readability',           color:'#7B3D8C',light:'#F5EAF9',dark:'#4A1A5E',   what:'Is the reading level appropriate, with clear sentences, short paragraphs, and scannable formatting?'},
+    {k:'originality',        label:'Originality & POV',     color:'#9B59B6',light:'#F5EEF8',dark:'#5B2C6F',   what:'Does the doc have a unique point of view, distinct voice, or fresh angle — or is it generic filler?'},
+  ]},
+  {cat:'Structure & Navigation',dims:[
+    {k:'structure_and_ia',   label:'Structure & Flow',      color:'#1F4D8C',light:'#E8EEF9',dark:'#0D2D5E',   what:'Is the document structured logically and scannable for how this ICP reads and makes decisions?'},
+    {k:'accessibility_incl', label:'Accessibility & Clarity',color:'#2E6DA4',light:'#E8F2FA',dark:'#1A3D66', what:'Is language plain, jargon avoided, and no assumed knowledge required from the reader?'},
+  ]},
+  {cat:'Trust & Credibility',dims:[
+    {k:'credibility_trust',  label:'Credibility & Trust',   color:'#8B4513',light:'#FAEEE6',dark:'#5C2A00',   what:'Are there social proof, data citations, author authority, or verifiable evidence signals?'},
+    {k:'accuracy_facts',     label:'Accuracy & Specificity',color:'#1A5276',light:'#EAF2F8',dark:'#0E2D42',   what:'Are claims specific, verifiable, backed by data or concrete examples — not vague assertions?'},
+  ]},
+  {cat:'Discoverability',dims:[
+    {k:'seo_discoverability',label:'SEO & Discoverability', color:'#1A7A3C',light:'#E3F5EB',dark:'#0A4020',   what:'Does the doc have keyword relevance, clear heading hierarchy, and strong search intent alignment?'},
+  ]},
+  {cat:'Conversion',dims:[
+    {k:'cta_conversion',     label:'CTA & Conversion',      color:'#C0392B',light:'#FDECEB',dark:'#7B1A14',   what:'Is there a clear, compelling, low-friction next step with evident benefit or urgency?'},
+  ]},
+];
 
-let docText='', activeTab='file', selectedICPs=new Set(), currentResults=null;
+// Flat lookup
+const DIMS={};
+DIM_GROUPS.forEach(g=>g.dims.forEach(d=>DIMS[d.k]=d));
 
-/* ── ICP multi-select chips ─────────────────────────────────────────────────── */
+const CRITIQUE_SEV={icp_alignment:'high',value_proposition:'high',cta_conversion:'high',accuracy_facts:'high',messaging_clarity:'medium',tone_and_language:'medium',structure_and_ia:'medium',credibility_trust:'medium',readability:'medium',seo_discoverability:'medium',accessibility_incl:'low',originality:'medium'};
+
+let docText='', activeTab='file', selectedICPs=new Set();
+let pendingPrompt=null, confirmedICPs=null, detectedICP=null;
+
+/* ── ICP multi-select ───────────────────────────────────────────────────────── */
 function toggleChip(el){
   const id=el.dataset.icp;
+  const icp=ICPS[id];
   if(selectedICPs.has(id)){
     selectedICPs.delete(id);
-    el.classList.remove('selected');
+    el.classList.remove('sel');
+    el.style.background='';el.style.color='';el.style.borderColor='';
   } else {
     selectedICPs.add(id);
-    el.classList.add('selected');
+    el.classList.add('sel');
+    el.style.background=icp.color;el.style.color='#fff';el.style.borderColor=icp.color;
   }
 }
 
@@ -245,9 +279,8 @@ document.getElementById('fileInput').addEventListener('change',e=>{if(e.target.f
 async function readFile(file){
   hideError();hideWarn();
   if(file.type.startsWith('image/')){
-    docText='[IMAGE FILE: '+file.name+']\nAnalyze layout, messaging, visible text, and design quality.';
-    document.getElementById('fileIcon').textContent='🖼️';
-    setPill(file.name,false);return;
+    docText='[IMAGE FILE: '+file.name+']\nAnalyze layout, messaging, visible text, design quality.';
+    document.getElementById('fileIcon').textContent='🖼️';setPill(file.name,false);return;
   }
   if(file.type==='application/pdf'||file.name.endsWith('.pdf')){
     showProc('Extracting PDF text…');
@@ -257,33 +290,28 @@ async function readFile(file){
       let full='';
       for(let i=1;i<=pdf.numPages;i++){
         showProc('Extracting ('+i+'/'+pdf.numPages+' pages)…');
-        const pg=await pdf.getPage(i);
-        const ct=await pg.getTextContent();
-        full+='\n--- Page '+i+' ---\n'+ct.items.map(x=>x.str).join(' ');
+        const pg=await pdf.getPage(i);full+='\n--- Page '+i+' ---\n'+(await pg.getTextContent()).items.map(x=>x.str).join(' ');
       }
-      docText=full.trim()||'[Image-based PDF — no text layer found]';
-      document.getElementById('fileIcon').textContent='📕';
-      hideProc();setPill(file.name,true);
+      docText=full.trim()||'[Image-based PDF]';
+      document.getElementById('fileIcon').textContent='📕';hideProc();setPill(file.name,true);
     }catch(e){hideProc();showError('PDF error: '+e.message);}
     return;
   }
-  const reader=new FileReader();
-  reader.onload=e=>{
+  const r=new FileReader();
+  r.onload=e=>{
     const t=e.target.result||'';
     const bin=(t.match(/[\x00-\x08\x0E-\x1F]/g)||[]).length;
-    if(bin>50){showWarn('Binary file — export as PDF or .txt for best results.');docText='[Binary: '+file.name+']';}
+    if(bin>50){showWarn('Binary file — export as PDF or .txt.');docText='[Binary: '+file.name+']';}
     else docText=t;
-    document.getElementById('fileIcon').textContent='📄';
-    setPill(file.name,bin===0);
+    document.getElementById('fileIcon').textContent='📄';setPill(file.name,bin===0);
   };
-  reader.readAsText(file);
+  r.readAsText(file);
 }
 
 /* ── URL fetch ─────────────────────────────────────────────────────────────── */
 async function fetchURL(){
   const url=document.getElementById('urlInput').value.trim();
-  if(!url){showError('Enter a URL first.');return;}
-  if(!url.startsWith('http')){showError('URL must start with http:// or https://');return;}
+  if(!url||!url.startsWith('http')){showError('Enter a valid URL starting with http://');return;}
   hideError();hideWarn();showProc('Fetching URL…');
   document.getElementById('fetchBtn').disabled=true;
   try{
@@ -293,11 +321,11 @@ async function fetchURL(){
     const tmp=document.createElement('div');
     tmp.innerHTML=(data.html||'').replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<style[\s\S]*?<\/style>/gi,'').replace(/<nav[\s\S]*?<\/nav>/gi,'').replace(/<footer[\s\S]*?<\/footer>/gi,'').replace(/<header[\s\S]*?<\/header>/gi,'');
     let text=(tmp.innerText||tmp.textContent||'').replace(/\s{3,}/g,'\n\n').trim();
-    if(text.length<100) throw new Error('No readable text found. Page may require login or be JS-rendered.');
+    if(text.length<100) throw new Error('No readable text found.');
     docText='[SOURCE: '+url+']\n\n'+text;
-    document.getElementById('fileIcon').textContent='🌐';
-    hideProc();setPill(url.length>60?url.slice(0,57)+'…':url,true);
-    if(text.length<500) showWarn('Limited text extracted.');
+    document.getElementById('fileIcon').textContent='🌐';hideProc();
+    setPill(url.length>60?url.slice(0,57)+'…':url,true);
+    if(text.length<500) showWarn('Limited text extracted — page may be JS-rendered.');
   }catch(e){hideProc();showError('Could not fetch URL: '+e.message);}
   document.getElementById('fetchBtn').disabled=false;
 }
@@ -307,7 +335,7 @@ function setPill(label,preview){
   document.getElementById('filePill').style.display='flex';
   if(activeTab==='file') document.getElementById('dropZone').style.display='none';
   if(preview&&docText){
-    document.getElementById('previewText').value=docText.slice(0,1000)+(docText.length>1000?'\n\n[… truncated]':'');
+    document.getElementById('previewText').value=docText.slice(0,800)+(docText.length>800?'\n[…]':'');
     document.getElementById('previewWrap').style.display='block';
   }
   checkReady();
@@ -319,243 +347,410 @@ function removeDoc(){
   document.getElementById('fileInput').value='';
   document.getElementById('urlInput').value='';
   if(activeTab==='file') document.getElementById('dropZone').style.display='block';
+  document.getElementById('icpConfirmBox').style.display='none';
   hideError();hideWarn();checkReady();
 }
-function checkReady(){document.getElementById('analyzeBtn').disabled=!docText;}
+function checkReady(){document.getElementById('detectBtn').disabled=!docText;}
 function showProc(t){document.getElementById('processingText').textContent=t;document.getElementById('processingMsg').style.display='flex';}
 function hideProc(){document.getElementById('processingMsg').style.display='none';}
 function showError(t){const el=document.getElementById('errorBar');el.textContent=t;el.style.display='block';}
 function hideError(){document.getElementById('errorBar').style.display='none';}
 function showWarn(t){const el=document.getElementById('warnBar');el.textContent=t;el.style.display='block';}
 function hideWarn(){document.getElementById('warnBar').style.display='none';}
-function sc(v){return v>=75?'#639922':v>=50?'#BA7517':'#E24B4A';}
 
-/* ── Analyze ───────────────────────────────────────────────────────────────── */
-async function analyze(){
+/* ── PHASE 1: Detect ICP only ───────────────────────────────────────────────── */
+async function detectICP(){
   if(!docText)return;
-  const truncated=docText.length>12000?docText.slice(0,12000)+'\n\n[... truncated ...]':docText;
-  const icpHint=(document.getElementById('icpHint').value||'').trim();
-  const selectedArr=[...selectedICPs];
+  hideError();
+  document.getElementById('icpConfirmBox').style.display='none';
+  document.getElementById('detectBtn').disabled=true;
+  showProc('Detecting ICP from document…');
 
-  const icpSignalList=ICPS.map(i=>`- ${i.id}: Signals — ${i.signals}`).join('\n');
-  const dimList=Object.entries(DIMS).map(([k,d])=>`- ${k}: ${d.label} (${d.cat}, standard: ${d.std})`).join('\n');
+  const truncated=docText.length>8000?docText.slice(0,8000)+'[...truncated]':docText;
+  const icpSignals=Object.entries(ICPS).map(([id,v])=>`- ${id}: ${v.signals}`).join('\n');
 
-  const multiIcpNote = selectedArr.length>0
-    ? `USER SELECTED ICPs: ${selectedArr.join(', ')}${icpHint?' — described as: "'+icpHint+'"':''}\n- Auto-detect the primary ICP from document signals first.\n- If selected ICPs match or overlap the detected ICP, include analysis for ALL selected ICPs.\n- If selected ICPs do not match the detected ICP, note the mismatch and use only detected ICP.\n- If multiple ICPs are selected, provide a combined review covering all of them.`
-    : icpHint ? `USER ICP HINT: "${icpHint}" — use if it matches the auto-detected ICP.` : '';
+  const detectPrompt=`Analyze this document and detect the primary ICP. Respond ONLY with valid JSON, no markdown, no extra text.
 
-  const prompt=`You are an expert document reviewer and devil's advocate applying all industry publishing standards. Respond with ONLY a valid JSON object. No markdown, no code fences, no text before or after. Start with { end with }.
+ICP options and signals:
+${icpSignals}
 
 DOCUMENT:
 ${truncated}
 
-${multiIcpNote}
+Rules:
+- Pick the SINGLE best ICP based on dominant signals in the document.
+- Do NOT default to founder unless clearly justified.
+- If developer/marketer/agency signals exist, pick those.
 
-STEP 1 — AUTO-DETECT PRIMARY ICP:
-${icpSignalList}
-Pick the SINGLE best match. Do NOT default to founder unless clearly justified by document signals.
+Respond with ONLY:
+{"detected_icp":"developer|marketer|agency|founder","reason":"one sentence citing specific signals from the document"}`;
 
-STEP 2 — SCORE ALL DIMENSIONS (0-100 each, be harsh and specific):
-${dimList}
+  try{
+    const res=await fetch('/api/review',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:detectPrompt})});
+    const data=await res.json();
+    if(!res.ok) throw new Error(data.error||'Server error');
+    hideProc();
+    detectedICP=data.result.detected_icp||'founder';
+    const reason=data.result.reason||'';
+    handleICPDecision(detectedICP, reason);
+  }catch(e){
+    hideProc();showError('Detection failed: '+e.message);
+    document.getElementById('detectBtn').disabled=false;
+  }
+}
 
-Scoring criteria per dimension:
-- messaging_clarity: Is the core message immediately clear to this ICP in under 5 seconds?
-- icp_alignment: Does content directly address this ICP's specific pain points, goals, and language?
-- value_proposition: Is value clear, specific, quantified, and compelling for this ICP?
-- tone_and_language: Does vocabulary, formality, and style match how this ICP thinks and communicates?
-- structure_and_ia: Is flow logical, scannable, and structured for how this ICP reads and decides?
-- readability: Appropriate reading level, sentence length, paragraph density (Flesch-Kincaid standard)?
-- seo_discoverability: Keyword relevance, heading structure, meta intent, search intent alignment?
-- credibility_trust: Social proof, data citations, author authority, E-E-A-T signals present?
-- cta_conversion: Is there a clear, compelling, low-friction next step? Is urgency/benefit clear?
-- accessibility_incl: Plain language, avoids jargon, inclusive terminology, no assumed knowledge?
-- originality: Unique POV, distinct voice, not generic filler content?
-- accuracy_facts: Are claims specific, verifiable, and backed by data or examples?
+/* ── ICP Decision Logic ─────────────────────────────────────────────────────── */
+function handleICPDecision(detected, reason){
+  const userICPs=[...selectedICPs];
+  const desc=(document.getElementById('icpDesc').value||'').trim();
 
-STEP 3 — For EACH dimension provide 1-2 suggestions with:
-- exact section name from the document
-- what is currently wrong (one sentence)
-- specific actionable fix
-- example_statement: an exact copy-paste ready sentence/heading/statement they can drop into the doc
+  // No user selection — just analyze with detected
+  if(userICPs.length===0){
+    confirmedICPs=[detected];
+    runFullAnalysis([detected], desc);
+    return;
+  }
 
-STEP 4 — Write 4 devil's advocate critiques this ICP would raise.
+  const userHasDetected=userICPs.includes(detected);
+  const otherUserICPs=userICPs.filter(id=>id!==detected);
 
-RESPOND WITH ONLY THIS JSON:
-{
-  "detected_icp": "developer|marketer|agency|founder",
-  "detected_icp_reason": "one sentence citing specific signals from the document",
-  "icps_covered": ["list of icps actually reviewed"],
-  "icp_mismatch_note": "if selected ICPs were ignored, explain why — else empty string",
-  "overall_verdict": "one sharp honest sentence",
-  "icp_fit_score": 0,
-  "scores": {
-    "messaging_clarity":0,"icp_alignment":0,"value_proposition":0,"tone_and_language":0,
-    "structure_and_ia":0,"readability":0,"seo_discoverability":0,"credibility_trust":0,
-    "cta_conversion":0,"accessibility_incl":0,"originality":0,"accuracy_facts":0
-  },
-  "score_suggestions": {
-    "messaging_clarity":   [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}],
-    "icp_alignment":       [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}],
-    "value_proposition":   [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}],
-    "tone_and_language":   [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}],
-    "structure_and_ia":    [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}],
-    "readability":         [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}],
-    "seo_discoverability": [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}],
-    "credibility_trust":   [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}],
-    "cta_conversion":      [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}],
-    "accessibility_incl":  [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}],
-    "originality":         [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}],
-    "accuracy_facts":      [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}]
-  },
-  "devil_advocate_critiques": [
-    {"dimension":"...","critique":"..."},
-    {"dimension":"...","critique":"..."},
-    {"dimension":"...","critique":"..."},
-    {"dimension":"...","critique":"..."}
-  ],
-  "strongest_aspect": "what the doc does best",
-  "biggest_risk": "biggest gap vs the ICP"
-}`;
+  // All user selections match detected — no conflict
+  if(userICPs.length===1 && userHasDetected){
+    confirmedICPs=[detected];
+    runFullAnalysis([detected], desc);
+    return;
+  }
 
-  hideError();
+  // Build confirmation dialog
+  const detectedObj=ICPS[detected];
+  const box=document.getElementById('icpConfirmBox');
+  const sub=document.getElementById('icpConfirmSub');
+  const opts=document.getElementById('icpConfirmOpts');
+
+  box.style.display='block';
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+
+  if(!userHasDetected){
+    // Complete mismatch: user picked X but doc signals Y
+    const userNames=userICPs.map(id=>ICPS[id]?.name||id).join(', ');
+    sub.innerHTML=`The document signals suggest <strong style="color:${detectedObj?.color}">${detectedObj?.name||detected}</strong> as the primary ICP (${reason}), but you selected <strong>${userNames}</strong>.`;
+    opts.innerHTML=`
+      <label class="icp-opt" onclick="selectOpt(this,'detected')">
+        <input type="radio" name="icpChoice" value="detected"/>
+        <div><div class="icp-opt-label">Use system-detected ICP: <span style="color:${detectedObj?.color};font-weight:700;">${detectedObj?.name}</span></div>
+        <div class="icp-opt-desc">Review the doc as if written for a ${detectedObj?.name}. Most accurate based on document signals.</div></div>
+      </label>
+      <label class="icp-opt" onclick="selectOpt(this,'user')">
+        <input type="radio" name="icpChoice" value="user"/>
+        <div><div class="icp-opt-label">Use my selected ICP(s): <span style="font-weight:700;">${userNames}</span></div>
+        <div class="icp-opt-desc">Review as intended for ${userNames}. The doc may need significant changes to reach this audience.</div></div>
+      </label>
+      <label class="icp-opt" onclick="selectOpt(this,'both')">
+        <input type="radio" name="icpChoice" value="both"/>
+        <div><div class="icp-opt-label">Review for all ICPs (${[detected,...userICPs].filter((v,i,a)=>a.indexOf(v)===i).map(id=>ICPS[id]?.name||id).join(', ')})</div>
+        <div class="icp-opt-desc">Get a separate score and suggestions for each ICP with a comparison view.</div></div>
+      </label>`;
+  } else {
+    // Partial match: detected is in user list but user also picked others
+    const otherNames=otherUserICPs.map(id=>ICPS[id]?.name||id).join(', ');
+    sub.innerHTML=`Document detected as <strong style="color:${detectedObj?.color}">${detectedObj?.name}</strong> (${reason}). You also selected <strong>${otherNames}</strong> — should those be included?`;
+    opts.innerHTML=`
+      <label class="icp-opt" onclick="selectOpt(this,'detected')">
+        <input type="radio" name="icpChoice" value="detected"/>
+        <div><div class="icp-opt-label">Only detected ICP: <span style="color:${detectedObj?.color};font-weight:700;">${detectedObj?.name}</span></div>
+        <div class="icp-opt-desc">Focused review based on what the doc actually signals.</div></div>
+      </label>
+      <label class="icp-opt" onclick="selectOpt(this,'both')">
+        <input type="radio" name="icpChoice" value="both"/>
+        <div><div class="icp-opt-label">Include all selected ICPs (${userICPs.map(id=>ICPS[id]?.name||id).join(', ')})</div>
+        <div class="icp-opt-desc">Review for ${detectedObj?.name} + ${otherNames}. Shows how the doc performs for each audience.</div></div>
+      </label>`;
+  }
+}
+
+function selectOpt(el,val){
+  document.querySelectorAll('.icp-opt').forEach(o=>o.classList.remove('chosen'));
+  el.classList.add('chosen');
+  el.querySelector('input').checked=true;
+}
+
+function confirmAndAnalyze(){
+  const chosen=document.querySelector('input[name="icpChoice"]:checked');
+  if(!chosen){showError('Please select an option above.');return;}
+  const val=chosen.value;
+  const userICPs=[...selectedICPs];
+  const desc=(document.getElementById('icpDesc').value||'').trim();
+  document.getElementById('icpConfirmBox').style.display='none';
+
+  if(val==='detected') confirmedICPs=[detectedICP];
+  else if(val==='user') confirmedICPs=userICPs.length?userICPs:[detectedICP];
+  else confirmedICPs=[detectedICP,...userICPs].filter((v,i,a)=>a.indexOf(v)===i);
+
+  runFullAnalysis(confirmedICPs, desc);
+}
+
+function dismissConfirm(){
+  document.getElementById('icpConfirmBox').style.display='none';
+  document.getElementById('detectBtn').disabled=false;
+}
+
+/* ── PHASE 2: Full Analysis ─────────────────────────────────────────────────── */
+async function runFullAnalysis(icpList, desc){
+  const truncated=docText.length>12000?docText.slice(0,12000)+'[...truncated]':docText;
+  const icpDetails=icpList.map(id=>{
+    const v=ICPS[id];
+    return `${id}${desc&&icpList.length===1?` (described as: "${desc}")`:''}: ${v?.signals||''}`;
+  }).join('\n');
+
+  const dimList=Object.values(DIM_GROUPS).flatMap(g=>g.dims).map(d=>`- ${d.k}: ${d.label} — ${d.what}`).join('\n');
+  const dimKeys=Object.values(DIM_GROUPS).flatMap(g=>g.dims).map(d=>d.k);
+  const scoreTpl=dimKeys.map(k=>`"${k}":0`).join(',');
+  const suggTpl=dimKeys.map(k=>`"${k}":[{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}]`).join(',');
+
+  const multiMode=icpList.length>1;
+
+  const prompt=multiMode
+    ? buildMultiPrompt(icpList, icpDetails, truncated, dimList, dimKeys, scoreTpl, suggTpl)
+    : buildSinglePrompt(icpList[0], icpDetails, desc, truncated, dimList, dimKeys, scoreTpl, suggTpl);
+
   document.getElementById('results').innerHTML='';
-  document.getElementById('analyzeBtn').disabled=true;
-  showProc('Analyzing across all industry standards…');
+  document.getElementById('detectBtn').disabled=true;
+  showProc('Analyzing across all dimensions…');
 
   try{
     const res=await fetch('/api/review',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
     const data=await res.json();
     if(!res.ok) throw new Error(data.error||'Server error '+res.status);
     hideProc();
-    currentResults=data.result;
-    renderResults(data.result,icpHint);
+    renderResults(data.result, icpList, desc);
   }catch(e){
-    hideProc();
-    showError('Analysis failed: '+e.message);
+    hideProc();showError('Analysis failed: '+e.message);
   }
-  document.getElementById('analyzeBtn').disabled=false;
+  document.getElementById('detectBtn').disabled=false;
 }
 
-/* ── Render results ────────────────────────────────────────────────────────── */
-function renderResults(r,icpHint){
+function buildSinglePrompt(icp, icpDetails, desc, doc, dimList, dimKeys, scoreTpl, suggTpl){
+  return `You are an expert document reviewer and devil's advocate. Respond with ONLY valid JSON. No markdown, no code fences, no extra text. Start { end }.
+
+TARGET ICP: ${icpDetails}
+${desc?`ICP DESCRIPTION: "${desc}" — use this to refine the analysis specifically for this audience`:''}
+
+DOCUMENT:
+${doc}
+
+Score each dimension 0-100 (be harsh). For each give 1-2 suggestions with exact section names, what is wrong, a fix, and a copy-paste example statement.
+Write 4 devil's advocate critiques.
+
+DIMENSIONS TO SCORE:
+${dimList}
+
+RESPOND WITH ONLY:
+{
+  "icp_fit_score": 0,
+  "overall_verdict": "one sharp sentence",
+  "scores": {${scoreTpl}},
+  "score_suggestions": {${suggTpl}},
+  "devil_advocate_critiques": [
+    {"dimension":"...","critique":"..."},{"dimension":"...","critique":"..."},
+    {"dimension":"...","critique":"..."},{"dimension":"...","critique":"..."}
+  ],
+  "strongest_aspect": "...",
+  "biggest_risk": "..."
+}`;
+}
+
+function buildMultiPrompt(icpList, icpDetails, doc, dimList, dimKeys, scoreTpl, suggTpl){
+  const perIcpTpl=icpList.map(id=>`"${id}":{"icp_fit_score":0,"overall_verdict":"","scores":{${scoreTpl}},"score_suggestions":{${suggTpl}},"devil_advocate_critiques":[{"dimension":"...","critique":"..."},{"dimension":"...","critique":"..."},{"dimension":"...","critique":"..."}],"strongest_aspect":"...","biggest_risk":"..."}`).join(',');
+  return `You are an expert document reviewer. Respond ONLY with valid JSON. No markdown, no code fences. Start { end }.
+
+Analyze this document for MULTIPLE ICPs. Score it separately for each ICP listed.
+
+TARGET ICPs:
+${icpDetails}
+
+DOCUMENT:
+${doc}
+
+For EACH ICP, score all dimensions 0-100, give 1-2 suggestions per dimension with exact section references, what is wrong, a fix, and a copy-paste example statement. Write 3 devil's advocate critiques per ICP.
+
+DIMENSIONS:
+${dimList}
+
+RESPOND WITH ONLY:
+{
+  "overall_summary": "one sentence comparing how the doc performs across all ICPs",
+  "per_icp": {${perIcpTpl}}
+}`;
+}
+
+/* ── Render results ─────────────────────────────────────────────────────────── */
+function renderResults(r, icpList, desc){
+  const el=document.getElementById('results');
+  if(!el)return;
+  const isMulti=icpList.length>1&&r.per_icp;
+
+  if(isMulti){
+    renderMulti(r, icpList, desc, el);
+  } else {
+    renderSingle(r, icpList[0], desc, el);
+  }
+  el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function renderSingle(r, icpId, desc, el){
+  const icp=ICPS[icpId]||{name:icpId,color:'#555',light:'#f5f5f5'};
   const fit=r.icp_fit_score||0;
   const bc=fit>=75?'badge-g':fit>=50?'badge-a':'badge-r';
   const bl=fit>=75?'Good fit':fit>=50?'Partial fit':'Poor fit';
-  const icpObj=ICPS.find(i=>i.id===r.detected_icp);
-  const icpName=icpObj?icpObj.name:(r.detected_icp||'Unknown');
-  const icpsCovered=(r.icps_covered||[r.detected_icp]).filter(Boolean);
+  const scoreVals=Object.values(r.scores||{}).filter(v=>typeof v==='number');
+  const avg=scoreVals.length?Math.round(scoreVals.reduce((a,b)=>a+b,0)/scoreVals.length):0;
 
-  // group dims by category for display
-  const catGroups={};
-  Object.entries(DIMS).forEach(([k,d])=>{
-    if(!catGroups[d.cat]) catGroups[d.cat]=[];
-    catGroups[d.cat].push({key:k,...d,score:r.scores?.[k]??'-',suggs:r.score_suggestions?.[k]||[]});
+  el.innerHTML=`
+    <div class="divider"></div>
+    <div class="verdict-card">
+      <div style="display:inline-flex;align-items:center;gap:8px;padding:5px 12px;border-radius:99px;background:${icp.light};margin-bottom:10px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:${icp.color};display:inline-block;"></span>
+        <span style="font-size:12px;font-weight:700;color:${icp.color};">Reviewed as: ${icp.name}${desc?' · '+desc:''}</span>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:20px;margin-bottom:8px;flex-wrap:wrap;">
+        <div><div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;">ICP Fit</div>
+          <span class="score-big">${fit}<span>/100</span></span><span class="badge ${bc}">${bl}</span></div>
+        <div><div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;">Avg All Dimensions</div>
+          <span class="score-big" style="font-size:22px;">${avg}<span>/100</span></span></div>
+      </div>
+      <div class="verdict-text">"${r.overall_verdict||''}"</div>
+    </div>
+    <div class="card">
+      <div class="lbl" style="margin-bottom:4px;">Dimension Scores & Improvements</div>
+      <div style="font-size:11px;color:var(--faint);margin-bottom:1rem;">Click any dimension to expand suggestions</div>
+      ${buildDimBlocks(r.scores||{}, r.score_suggestions||{})}
+    </div>
+    <div class="card">
+      <div class="section-head">Devil's Advocate Critiques
+        <span style="font-size:11px;font-weight:400;color:var(--muted);margin-left:8px;">
+          <span style="background:#E24B4A;color:#fff;padding:1px 5px;border-radius:3px;font-size:10px;font-weight:700;">HIGH</span> dealbreaker &nbsp;
+          <span style="background:#C97B20;color:#fff;padding:1px 5px;border-radius:3px;font-size:10px;font-weight:700;">MED</span> fixable
+        </span>
+      </div>
+      ${buildCritiques(r.devil_advocate_critiques||[])}
+    </div>
+    <div class="two-col">
+      <div class="summary-box" style="background:var(--green-l);color:#173404;"><span class="slbl" style="color:var(--green);">Strongest aspect</span>${r.strongest_aspect||''}</div>
+      <div class="summary-box" style="background:var(--red-l);color:#3d0f0f;"><span class="slbl" style="color:var(--red);">Biggest risk</span>${r.biggest_risk||''}</div>
+    </div>`;
+}
+
+function renderMulti(r, icpList, desc, el){
+  let activeIcp=icpList[0];
+  const tabs=icpList.map(id=>{
+    const icp=ICPS[id]||{name:id,color:'#555',light:'#f5f5f5'};
+    return `<span class="icp-tab ${id===activeIcp?'active':''}" data-icp="${id}" style="color:${icp.color};border-color:${icp.color};background:${id===activeIcp?icp.light:'transparent'};" onclick="switchIcpTab(this,'${id}')">${icp.name}</span>`;
+  }).join('');
+
+  const panelsHtml=icpList.map(id=>{
+    const icp=ICPS[id]||{name:id,color:'#555',light:'#f5f5f5'};
+    const d=r.per_icp?.[id]||{};
+    const fit=d.icp_fit_score||0;
+    const bc=fit>=75?'badge-g':fit>=50?'badge-a':'badge-r';
+    const bl=fit>=75?'Good fit':fit>=50?'Partial fit':'Poor fit';
+    const scoreVals=Object.values(d.scores||{}).filter(v=>typeof v==='number');
+    const avg=scoreVals.length?Math.round(scoreVals.reduce((a,b)=>a+b,0)/scoreVals.length):0;
+    return `<div class="icp-panel" id="panel-${id}" style="display:${id===activeIcp?'block':'none'};">
+      <div style="display:flex;align-items:baseline;gap:20px;margin-bottom:8px;flex-wrap:wrap;padding:10px 0;">
+        <div><div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;">ICP Fit</div>
+          <span class="score-big">${fit}<span>/100</span></span><span class="badge ${bc}">${bl}</span></div>
+        <div><div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;">Avg All Dims</div>
+          <span class="score-big" style="font-size:22px;">${avg}<span>/100</span></span></div>
+      </div>
+      <div class="verdict-text" style="margin-bottom:1rem;">"${d.overall_verdict||''}"</div>
+      <div style="font-size:11px;color:var(--faint);margin-bottom:0.75rem;">Click any dimension to expand</div>
+      ${buildDimBlocks(d.scores||{},d.score_suggestions||{})}
+      <div style="margin-top:1rem;">${buildCritiques(d.devil_advocate_critiques||[])}</div>
+      <div class="two-col" style="margin-top:1rem;">
+        <div class="summary-box" style="background:var(--green-l);color:#173404;"><span class="slbl" style="color:var(--green);">Strongest</span>${d.strongest_aspect||''}</div>
+        <div class="summary-box" style="background:var(--red-l);color:#3d0f0f;"><span class="slbl" style="color:var(--red);">Biggest risk</span>${d.biggest_risk||''}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  el.innerHTML=`
+    <div class="divider"></div>
+    <div class="card" style="margin-bottom:0.5rem;">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:10px;">${r.overall_summary||''}</div>
+      <div class="icp-tabs" id="icpTabsRow">${tabs}</div>
+      ${panelsHtml}
+    </div>`;
+}
+
+function switchIcpTab(el, icpId){
+  document.querySelectorAll('.icp-tab').forEach(t=>{
+    const id=t.dataset.icp;const icp=ICPS[id]||{color:'#555',light:'#f5f5f5'};
+    t.classList.remove('active');t.style.background='transparent';
   });
+  const icp=ICPS[icpId]||{color:'#555',light:'#f5f5f5'};
+  el.classList.add('active');el.style.background=icp.light;
+  document.querySelectorAll('.icp-panel').forEach(p=>p.style.display='none');
+  const panel=document.getElementById('panel-'+icpId);
+  if(panel) panel.style.display='block';
+}
 
-  const scores=r.scores||{};
-  const suggs=r.score_suggestions||{};
-
-  // Overall average
-  const scoreVals=Object.values(scores).filter(v=>typeof v==='number');
-  const avgScore=scoreVals.length?Math.round(scoreVals.reduce((a,b)=>a+b,0)/scoreVals.length):0;
-
-  // Build grouped score blocks
-  let scoresHtml='';
-  Object.entries(catGroups).forEach(([cat,dims])=>{
-    scoresHtml+=`<div style="margin-bottom:0.75rem;"><div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;padding:0 2px;">${cat}</div>`;
-    dims.forEach(d=>{
-      const v=typeof d.score==='number'?d.score:0;
-      const suggHtml=d.suggs.map(s=>`
+function buildDimBlocks(scores, suggs){
+  let html='';
+  DIM_GROUPS.forEach(g=>{
+    html+=`<div class="cat-head">${g.cat}</div>`;
+    g.dims.forEach(d=>{
+      const v=typeof scores[d.k]==='number'?scores[d.k]:0;
+      const dimSuggs=suggs[d.k]||[];
+      const uid=d.k+'_'+Math.random().toString(36).slice(2,7);
+      const suggHtml=dimSuggs.map(s=>`
         <div class="suggestion-card">
           <div class="sc-header" style="background:${d.light};color:${d.dark};">
             <span style="width:7px;height:7px;border-radius:50%;background:${d.color};display:inline-block;flex-shrink:0;"></span>
             <span style="font-weight:700;">${d.label}</span>
-            <span class="sc-section" style="color:${d.dark};">📍 ${s.section||'General'}</span>
+            ${s.section?`<span class="sc-section">📍 ${s.section}</span>`:''}
           </div>
           ${s.what_is_wrong?`<div class="sc-what">⚠ ${s.what_is_wrong}</div>`:''}
-          <div class="sc-body" style="border-left-color:${d.color};">💡 ${s.suggestion}</div>
-          ${s.example_statement?`<div class="sc-example"><div class="sc-example-inner" style="background:${d.light};border-color:${d.color};color:${d.dark};">✏️ <strong>Try this:</strong> "${s.example_statement}"</div></div>`:''}
+          <div class="sc-body" style="border-left-color:${d.color};">💡 ${s.suggestion||''}</div>
+          ${s.example_statement?`<div class="sc-example"><div class="sc-example-inner" style="background:${d.light};border-color:${d.color};color:${d.dark};">✏️ <strong>Add this:</strong> "${s.example_statement}"</div></div>`:''}
         </div>`).join('');
-      scoresHtml+=`<div class="dim-block" style="border-color:${d.color}40;">
-        <div class="dim-header" style="background:${d.light};">
+      html+=`<div class="dim-block" style="border-color:${d.color}40;">
+        <div class="dim-header" style="background:${d.light};" onclick="toggleDim('${uid}',this)">
           <span class="dim-dot" style="background:${d.color};"></span>
           <span class="dim-title" style="color:${d.dark};">${d.label}</span>
-          <span class="dim-std">${d.std}</span>
+          <span class="dim-cat-tag">${g.cat}</span>
           <div class="dim-bar"><div class="dim-fill" style="width:${v}%;background:${d.color};"></div></div>
           <span class="dim-score" style="color:${d.color};">${v}/100</span>
+          <span class="dim-chevron" id="chev-${uid}">▸</span>
         </div>
-        ${suggHtml}
+        <div class="dim-body" id="body-${uid}">${suggHtml||'<div style="padding:10px 14px;font-size:13px;color:var(--muted);">No suggestions for this dimension.</div>'}</div>
       </div>`;
     });
-    scoresHtml+='</div>';
   });
+  return html;
+}
 
-  const critiquesHtml=(r.devil_advocate_critiques||[]).map(c=>{
+function toggleDim(uid, header){
+  const body=document.getElementById('body-'+uid);
+  const chev=document.getElementById('chev-'+uid);
+  if(!body)return;
+  const open=body.classList.toggle('open');
+  if(chev) chev.textContent=open?'▾':'▸';
+}
+
+function buildCritiques(critiques){
+  return critiques.map(c=>{
     const obj=typeof c==='object'?c:{dimension:'general',critique:c};
     const sev=CRITIQUE_SEV[obj.dimension]||'medium';
-    const dimDef=DIMS[obj.dimension]||{label:obj.dimension||'General',color:'#E24B4A',light:'#FCEBEB',dark:'#3d0f0f'};
+    const dim=DIMS[obj.dimension]||{label:obj.dimension||'General',color:'#888',light:'#f5f5f5'};
     const sevBg=sev==='high'?'#FCEBEB':sev==='medium'?'#FAEEDA':'#F5F5F5';
     const sevBorder=sev==='high'?'#E24B4A':sev==='medium'?'#C97B20':'#999';
     const sevText=sev==='high'?'#3d0f0f':sev==='medium'?'#5C3200':'#333';
-    const sevTag=sev==='high'
-      ?`<span style="padding:2px 7px;border-radius:4px;background:#E24B4A;color:#fff;font-size:10px;font-weight:700;">HIGH</span>`
-      :sev==='medium'
-      ?`<span style="padding:2px 7px;border-radius:4px;background:#C97B20;color:#fff;font-size:10px;font-weight:700;">MED</span>`
-      :`<span style="padding:2px 7px;border-radius:4px;background:#888;color:#fff;font-size:10px;font-weight:700;">LOW</span>`;
-    return `<div class="critique-card" style="background:${sevBg};border-left:3px solid ${sevBorder};">
-      <div class="cc-head" style="background:${sevBg};color:${sevText};">
-        ${sevTag}
-        <span style="padding:2px 8px;border-radius:4px;background:${dimDef.light};color:${dimDef.color};font-size:11px;font-weight:600;">${dimDef.label}</span>
-      </div>
+    const tag=sev==='high'?`<span style="padding:2px 7px;border-radius:4px;background:#E24B4A;color:#fff;font-size:10px;font-weight:700;">HIGH</span>`:sev==='medium'?`<span style="padding:2px 7px;border-radius:4px;background:#C97B20;color:#fff;font-size:10px;font-weight:700;">MED</span>`:`<span style="padding:2px 7px;border-radius:4px;background:#888;color:#fff;font-size:10px;font-weight:700;">LOW</span>`;
+    return `<div class="critique-card" style="background:${sevBg};border-left:3px solid ${sevBorder};margin-bottom:8px;">
+      <div class="cc-head" style="background:${sevBg};color:${sevText};">${tag}<span style="padding:2px 8px;border-radius:4px;background:${dim.light};color:${dim.color};font-size:11px;font-weight:600;">${dim.label}</span></div>
       <div class="cc-body" style="color:${sevText};">${obj.critique||c}</div>
     </div>`;
   }).join('');
-
-  // ICP coverage pills
-  const icpPills=icpsCovered.map(id=>{
-    const obj=ICPS.find(i=>i.id===id);
-    return obj?`<span style="padding:3px 10px;border-radius:99px;background:${obj.light};color:${obj.color};font-size:12px;font-weight:600;border:1px solid ${obj.color}40;">${obj.name}</span>`:'';
-  }).join('');
-
-  const el=document.getElementById('results');
-  if(!el)return;
-  el.innerHTML=`
-    <div class="divider"></div>
-    <div class="verdict-card">
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
-        <span style="font-size:12px;font-weight:600;color:var(--green);">🎯 Detected ICP:</span>
-        ${icpPills||`<span style="font-size:13px;font-weight:600;">${icpName}</span>`}
-        ${icpHint&&r.icp_hint_used?`<span style="font-size:11px;color:var(--muted);">· "${icpHint}"</span>`:''}
-      </div>
-      ${r.icp_mismatch_note?`<div class="mismatch-banner">⚡ ICP hint/selection overridden: ${r.icp_mismatch_note}</div>`:''}
-      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">${r.detected_icp_reason||''}</div>
-      <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:6px;">
-        <div><span style="font-size:11px;color:var(--muted);font-weight:500;">ICP FIT</span><br><span class="score-big">${fit}<span>/100</span></span><span class="badge ${bc}">${bl}</span></div>
-        <div><span style="font-size:11px;color:var(--muted);font-weight:500;">AVG ACROSS ALL DIMS</span><br><span class="score-big" style="font-size:22px;">${avgScore}<span>/100</span></span></div>
-      </div>
-      <div class="verdict-text">"${r.overall_verdict}"</div>
-    </div>
-    <div class="card">
-      <div class="lbl" style="margin-bottom:1rem;">All Dimensions — Scores & Improvements
-        <span style="font-weight:400;color:var(--faint);font-size:10px;margin-left:6px;">Industry standards shown per dimension</span>
-      </div>
-      ${scoresHtml}
-    </div>
-    <div class="card">
-      <div class="section-head">
-        Devil's Advocate Critiques
-        <span style="font-size:11px;font-weight:400;color:var(--muted);margin-left:8px;">
-          <span style="background:#E24B4A;color:#fff;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:700;">HIGH</span> dealbreaker &nbsp;
-          <span style="background:#C97B20;color:#fff;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:700;">MED</span> fixable gap
-        </span>
-      </div>
-      ${critiquesHtml}
-    </div>
-    <div class="two-col">
-      <div class="summary-box" style="background:var(--green-l);color:#173404;"><div class="slbl" style="color:var(--green);">Strongest aspect</div>${r.strongest_aspect}</div>
-      <div class="summary-box" style="background:var(--red-l);color:#3d0f0f;"><div class="slbl" style="color:var(--red);">Biggest risk</div>${r.biggest_risk}</div>
-    </div>`;
-  el.scrollIntoView({behavior:'smooth',block:'start'});
 }
 </script>
 </body>
