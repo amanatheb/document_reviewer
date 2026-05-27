@@ -9,56 +9,68 @@ const app = express();
 app.use(express.json({ limit: "2mb" }));
 app.use(express.static("public"));
 
-// debug — logs all env keys on startup (not values)
-console.log("ENV KEYS:", Object.keys(process.env).filter(k=>k.includes('GROQ')||k.includes('API')));
+// Models tried in order — if one hits rate limit, next is tried
+const MODELS = [
+  "llama-3.1-8b-instant",      // smallest, fastest, fewest tokens
+  "gemma2-9b-it",               // Google Gemma — separate quota
+  "llama-3.3-70b-versatile",    // full model, used last to save quota
+];
 
-// ── Groq review ───────────────────────────────────────────────────────────────
+async function callGroq(prompt, modelIndex = 0) {
+  if (modelIndex >= MODELS.length) throw new Error("All models rate-limited. Please try again in a few minutes.");
+  const model = MODELS[modelIndex];
+  const key = process.env.GROQ_API_KEY;
+
+  const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + key },
+    body: JSON.stringify({
+      model,
+      messages: [
+        { role: "system", content: "You are an expert document reviewer. Respond with ONLY a valid JSON object. No markdown, no code fences, no explanation. Start with { and end with }." },
+        { role: "user", content: prompt }
+      ],
+      temperature: 0.2,
+      max_tokens: 2048,
+      response_format: { type: "json_object" }
+    }),
+  });
+
+  const data = await r.json();
+
+  // Rate limit — try next model
+  if (r.status === 429 || data.error?.message?.includes("rate limit") || data.error?.message?.includes("Rate limit")) {
+    console.log(`Model ${model} rate-limited, trying next...`);
+    return callGroq(prompt, modelIndex + 1);
+  }
+
+  if (!r.ok) throw new Error(data.error?.message || `API error ${r.status}`);
+
+  const raw = data.choices?.[0]?.message?.content || "";
+  if (!raw) throw new Error("Empty response");
+
+  const start = raw.indexOf("{");
+  const end   = raw.lastIndexOf("}");
+  if (start === -1 || end === -1) throw new Error("No JSON in response");
+
+  return JSON.parse(raw.slice(start, end + 1));
+}
+
+// ── Review endpoint ────────────────────────────────────────────────────────────
 app.post("/api/review", async (req, res) => {
   const { prompt } = req.body;
   if (!prompt) return res.status(400).json({ error: "No prompt provided." });
-
-  const key = process.env.GROQ_API_KEY;
-  console.log("GROQ key present:", !!key, "length:", key ? key.length : 0);
-
-  if (!key) return res.status(500).json({ error: "GROQ_API_KEY not set on server. Keys found: " + Object.keys(process.env).join(",").slice(0,200) });
-
+  if (!process.env.GROQ_API_KEY) return res.status(500).json({ error: "GROQ_API_KEY not set." });
   try {
-    const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + key
-      },
-      body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        messages: [
-          { role: "system", content: "You are an expert document reviewer. Respond with ONLY a valid JSON object. No markdown, no code fences, no explanation. Start with { and end with }." },
-          { role: "user", content: prompt }
-        ],
-        temperature: 0.2,
-        max_tokens: 2048,
-        response_format: { type: "json_object" }
-      }),
-    });
-
-    const data = await r.json();
-    if (!r.ok) return res.status(r.status).json({ error: data.error?.message || "Groq API error" });
-
-    const raw = data.choices?.[0]?.message?.content || "";
-    if (!raw) throw new Error("Empty response from Groq");
-
-    const start = raw.indexOf("{");
-    const end   = raw.lastIndexOf("}");
-    if (start === -1 || end === -1) throw new Error("No JSON in response: " + raw.slice(0,200));
-
-    res.json({ result: JSON.parse(raw.slice(start, end + 1)) });
+    const result = await callGroq(prompt);
+    res.json({ result });
   } catch (e) {
     console.error("Review error:", e.message);
     res.status(500).json({ error: e.message });
   }
 });
 
-// ── URL fetch proxy ───────────────────────────────────────────────────────────
+// ── URL fetch proxy ────────────────────────────────────────────────────────────
 app.post("/api/fetch-url", async (req, res) => {
   const { url } = req.body;
   if (!url) return res.status(400).json({ error: "No URL provided." });
@@ -77,4 +89,4 @@ const uploadsDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`✅ ICP Reviewer running on port ${PORT}`));
+app.listen(PORT, () => console.log(`✅ ICP Reviewer → http://localhost:${PORT}`));
