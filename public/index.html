@@ -15,7 +15,7 @@
   --r:10px;--rl:14px;
 }
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;min-height:100vh;}
-.page{max-width:780px;margin:0 auto;padding:2.5rem 1.5rem 4rem;}
+.page{max-width:820px;margin:0 auto;padding:2.5rem 1.5rem 4rem;}
 h1{font-size:22px;font-weight:600;margin-bottom:4px;}
 .subtitle{font-size:14px;color:var(--muted);margin-bottom:2rem;}
 .card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--rl);padding:1.25rem 1.5rem;margin-bottom:1.25rem;}
@@ -32,7 +32,7 @@ h1{font-size:22px;font-weight:600;margin-bottom:4px;}
 .drop-zone .dz-icon{font-size:28px;color:var(--muted);margin-bottom:6px;}
 .drop-zone .dz-main{font-size:14px;color:var(--muted);}
 .drop-zone .dz-hint{font-size:12px;color:var(--faint);margin-top:4px;}
-/* url row */
+/* url */
 .url-row{display:flex;gap:8px;}
 .url-inp{flex:1;padding:10px 14px;border:0.5px solid var(--border-med);border-radius:var(--r);font-size:14px;font-family:inherit;background:var(--surface);color:var(--text);outline:none;transition:border-color 0.14s;}
 .url-inp:focus{border-color:var(--blue);}
@@ -40,13 +40,6 @@ h1{font-size:22px;font-weight:600;margin-bottom:4px;}
 .url-btn:hover{opacity:0.88;}
 .url-btn:disabled{opacity:0.4;cursor:not-allowed;}
 .url-hint{font-size:12px;color:var(--faint);margin-top:6px;}
-/* icp hint field */
-.icp-hint-wrap{margin-top:1rem;padding-top:1rem;border-top:0.5px solid var(--border);}
-.icp-hint-inp{width:100%;padding:10px 14px;border:0.5px solid var(--border-med);border-radius:var(--r);font-size:14px;font-family:inherit;background:var(--surface);color:var(--text);outline:none;transition:border-color 0.14s;}
-.icp-hint-inp:focus{border-color:var(--blue);}
-.icp-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
-.chip{padding:4px 12px;border-radius:99px;font-size:12px;font-weight:500;border:1px solid var(--border-med);background:var(--surface);color:var(--muted);cursor:pointer;transition:all 0.14s;}
-.chip:hover{border-color:var(--blue);color:var(--blue);}
 /* file pill */
 .file-pill{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#f0f0ed;border-radius:var(--r);margin-top:10px;}
 .file-pill .fname{font-size:13px;font-weight:500;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -56,9 +49,16 @@ h1{font-size:22px;font-weight:600;margin-bottom:4px;}
 .processing{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--blue-l);border-radius:var(--r);font-size:13px;color:var(--blue);margin-top:10px;}
 .spinner{width:15px;height:15px;border:2px solid #B5D4F4;border-top-color:var(--blue);border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0;}
 @keyframes spin{to{transform:rotate(360deg);}}
-/* preview */
 .preview-wrap{margin-top:10px;}
 textarea{width:100%;padding:10px 14px;border:0.5px solid var(--border-med);border-radius:var(--r);font-size:14px;font-family:inherit;background:var(--surface);color:var(--text);resize:vertical;outline:none;}
+/* ICP section */
+.icp-section{margin-top:1rem;padding-top:1rem;border-top:0.5px solid var(--border);}
+.icp-multi-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.icp-chip{padding:5px 14px;border-radius:99px;font-size:13px;font-weight:500;border:1.5px solid var(--border-med);background:var(--surface);color:var(--muted);cursor:pointer;transition:all 0.14s;user-select:none;}
+.icp-chip:hover{border-color:var(--blue);color:var(--blue);}
+.icp-chip.selected{background:var(--blue);color:#fff;border-color:var(--blue);}
+.icp-hint-inp{width:100%;padding:10px 14px;border:0.5px solid var(--border-med);border-radius:var(--r);font-size:14px;font-family:inherit;background:var(--surface);color:var(--text);outline:none;transition:border-color 0.14s;margin-top:4px;}
+.icp-hint-inp:focus{border-color:var(--blue);}
 /* btn */
 .btn{width:100%;padding:13px;border-radius:var(--r);border:none;background:#111;color:#fff;font-size:15px;font-weight:500;cursor:pointer;transition:opacity 0.14s;margin-top:0.5rem;}
 .btn:hover{opacity:0.85;}
@@ -66,7 +66,6 @@ textarea{width:100%;padding:10px 14px;border:0.5px solid var(--border-med);borde
 /* alerts */
 .error{padding:12px 14px;background:var(--red-l);border-radius:var(--r);font-size:13px;color:var(--red);margin-top:10px;}
 .warn{padding:12px 14px;background:var(--amber-l);border-radius:var(--r);font-size:13px;color:var(--amber);margin-top:8px;}
-/* icp mismatch banner */
 .mismatch-banner{padding:10px 14px;background:#FFF8E6;border:0.5px solid #E8C84A;border-radius:var(--r);font-size:13px;color:#5C4200;margin-bottom:12px;line-height:1.6;}
 /* results */
 .divider{height:0.5px;background:var(--border);margin:1.25rem 0;}
@@ -83,6 +82,7 @@ textarea{width:100%;padding:10px 14px;border:0.5px solid var(--border-med);borde
 .dim-header{display:flex;align-items:center;gap:10px;padding:10px 14px;}
 .dim-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
 .dim-title{font-size:13px;font-weight:700;flex:1;}
+.dim-std{font-size:10px;font-weight:500;padding:2px 7px;border-radius:4px;background:rgba(0,0,0,0.06);color:var(--muted);margin-left:4px;}
 .dim-bar{flex:1;height:5px;border-radius:99px;overflow:hidden;max-width:90px;background:rgba(0,0,0,0.08);}
 .dim-fill{height:100%;border-radius:99px;}
 .dim-score{font-size:13px;font-weight:700;min-width:44px;text-align:right;}
@@ -95,7 +95,7 @@ textarea{width:100%;padding:10px 14px;border:0.5px solid var(--border-med);borde
 .sc-body{padding:4px 14px 8px;font-size:13px;color:var(--text);line-height:1.65;border-left:3px solid transparent;}
 .sc-example{padding:4px 14px 12px;font-size:12px;line-height:1.6;}
 .sc-example-inner{padding:8px 12px;border-radius:var(--r);border-left:3px solid;font-family:inherit;}
-/* critique cards */
+/* critique */
 .critique-card{border-radius:var(--r);margin-bottom:8px;overflow:hidden;}
 .cc-head{display:flex;align-items:center;gap:8px;padding:8px 12px;font-size:11px;font-weight:700;border-bottom:0.5px solid rgba(0,0,0,0.08);}
 .cc-body{padding:8px 14px 12px;font-size:13px;line-height:1.65;}
@@ -104,16 +104,20 @@ textarea{width:100%;padding:10px 14px;border:0.5px solid var(--border-med);borde
 .summary-box{padding:14px 16px;border-radius:var(--r);font-size:13px;line-height:1.55;}
 .summary-box .slbl{font-weight:600;margin-bottom:5px;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;}
 .section-head{font-size:13px;font-weight:600;margin-bottom:12px;}
+/* icp per-result tabs */
+.icp-result-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem;}
+.icp-rtab{padding:5px 14px;border-radius:99px;font-size:12px;font-weight:600;border:1.5px solid;cursor:pointer;transition:all 0.14s;opacity:0.55;}
+.icp-rtab.active{opacity:1;}
 input[type="file"]{display:none;}
 </style>
 </head>
 <body>
 <div class="page">
   <h1>ICP Document Reviewer</h1>
-  <p class="subtitle">Upload a doc or paste a URL — get an instant devil's advocate review</p>
+  <p class="subtitle">Upload a doc or paste a URL — instant devil's advocate review against industry standards</p>
 
   <div class="how-box">
-    <strong>How it works:</strong> Add your document, optionally hint your ICP → click Analyze → ICP is auto-detected from the document and you get a full review with specific suggestions.
+    <strong>How it works:</strong> Add your document → optionally select one or more target ICPs → click Analyze. The system auto-detects the primary ICP from the doc, scores across all industry-standard dimensions, and gives copy-paste ready suggestions.
   </div>
 
   <div class="card">
@@ -122,7 +126,6 @@ input[type="file"]{display:none;}
       <button class="tab-btn" id="tabUrl" onclick="switchTab('url')">🔗 Paste URL</button>
     </div>
 
-    <!-- FILE TAB -->
     <div id="fileTab">
       <input type="file" id="fileInput" accept=".txt,.md,.html,.csv,.pdf,.png,.jpg,.jpeg"/>
       <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
@@ -132,7 +135,6 @@ input[type="file"]{display:none;}
       </div>
     </div>
 
-    <!-- URL TAB -->
     <div id="urlTab" style="display:none;">
       <div class="url-row">
         <input class="url-inp" type="text" id="urlInput" placeholder="https://… any public webpage, blog post, landing page"/>
@@ -141,7 +143,6 @@ input[type="file"]{display:none;}
       <div class="url-hint">Works with public webpages, published Google Docs, public Notion pages, landing pages</div>
     </div>
 
-    <!-- SHARED STATUS -->
     <div id="processingMsg" style="display:none;" class="processing">
       <div class="spinner"></div><span id="processingText">Processing…</span>
     </div>
@@ -156,17 +157,17 @@ input[type="file"]{display:none;}
     </div>
     <div id="warnBar" style="display:none;" class="warn"></div>
 
-    <!-- ICP HINT -->
-    <div class="icp-hint-wrap">
-      <span class="lbl">Your ICP hint <span style="font-weight:400;color:var(--faint);">(optional — system auto-detects from doc)</span></span>
-      <div class="icp-chips">
-        <span class="chip" onclick="setChip('developer')">Developer</span>
-        <span class="chip" onclick="setChip('marketer')">Marketer</span>
-        <span class="chip" onclick="setChip('agency')">Agency</span>
-        <span class="chip" onclick="setChip('founder')">Founder</span>
+    <!-- ICP MULTI-SELECT -->
+    <div class="icp-section">
+      <span class="lbl">Target ICPs <span style="font-weight:400;color:var(--faint);">(select one or more — system also auto-detects from doc)</span></span>
+      <div class="icp-multi-chips" id="icpChips">
+        <span class="icp-chip" data-icp="developer" onclick="toggleChip(this)">👨‍💻 Developer</span>
+        <span class="icp-chip" data-icp="marketer"  onclick="toggleChip(this)">📣 Marketer</span>
+        <span class="icp-chip" data-icp="agency"    onclick="toggleChip(this)">🏢 Agency</span>
+        <span class="icp-chip" data-icp="founder"   onclick="toggleChip(this)">🚀 Founder</span>
       </div>
-      <input class="icp-hint-inp" type="text" id="icpHint" placeholder="e.g. WordPress developer, B2B SaaS marketer, boutique design agency, bootstrapped founder…"/>
-      <div style="font-size:11px;color:var(--faint);margin-top:5px;">If your hint matches the auto-detected ICP, your description refines the analysis. If they differ, the auto-detected ICP is used.</div>
+      <input class="icp-hint-inp" type="text" id="icpHint" placeholder="Describe further (optional): e.g. WordPress developer, B2B SaaS marketer, boutique design agency…"/>
+      <div style="font-size:11px;color:var(--faint);margin-top:5px;">If your selection matches the auto-detected ICP, your description refines the analysis. Multiple selections = review covers all chosen ICPs.</div>
     </div>
   </div>
 
@@ -179,34 +180,44 @@ input[type="file"]{display:none;}
 pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
 const ICPS=[
-  {id:'developer', name:'Developer', signals:'APIs, SDKs, code, GitHub, CI/CD, engineering, infrastructure, docs, open source, technical integration'},
-  {id:'marketer',  name:'Marketer',  signals:'campaigns, leads, conversions, SEO, content, email, attribution, HubSpot, analytics, brand, demand gen'},
-  {id:'agency',    name:'Agency',    signals:'client work, retainers, deliverables, white-label, multiple accounts, account management, client reporting'},
-  {id:'founder',   name:'Founder',   signals:'MVP, fundraising, product-market fit, bootstrapping, early customers, startup, building a product'},
+  {id:'developer',name:'Developer',color:'#185FA5',light:'#E6F1FB',signals:'APIs, SDKs, code, GitHub, CI/CD, engineering, infrastructure, docs, open source, technical integration'},
+  {id:'marketer', name:'Marketer', color:'#0E7C5B',light:'#E2F4EE',signals:'campaigns, leads, conversions, SEO, content, email, attribution, HubSpot, analytics, brand, demand gen'},
+  {id:'agency',   name:'Agency',   color:'#6B3FA0',light:'#F0EAF9',signals:'client work, retainers, deliverables, white-label, multiple accounts, account management, client reporting'},
+  {id:'founder',  name:'Founder',  color:'#B05C10',light:'#FAEEDA',signals:'MVP, fundraising, product-market fit, bootstrapping, early customers, startup, building a product'},
 ];
 
-const DIM_LABELS={messaging_clarity:'Messaging Clarity',icp_alignment:'ICP Alignment',value_proposition:'Value Proposition',tone_and_language:'Tone & Language',structure_and_ia:'Structure & IA'};
-const DIM_COLOURS={
-  messaging_clarity:{a:'#185FA5',l:'#E6F1FB',t:'#0C447C'},
-  icp_alignment:    {a:'#6B3FA0',l:'#F0EAF9',t:'#3D1A6E'},
-  value_proposition:{a:'#B05C10',l:'#FAEEDA',t:'#6B3600'},
-  tone_and_language:{a:'#0E7C5B',l:'#E2F4EE',t:'#0A4F3A'},
-  structure_and_ia: {a:'#1F4D8C',l:'#E8EEF9',t:'#0D2D5E'},
+// All industry-standard dimensions with category tags
+const DIMS={
+  // Core ICP & Messaging
+  messaging_clarity:    {label:'Messaging Clarity',      cat:'Messaging',       color:'#185FA5',light:'#E6F1FB',dark:'#0C447C', std:'Content Marketing Institute'},
+  icp_alignment:        {label:'ICP Alignment',          cat:'Audience',        color:'#6B3FA0',light:'#F0EAF9',dark:'#3D1A6E', std:'SiriusDecisions'},
+  value_proposition:    {label:'Value Proposition',      cat:'Positioning',     color:'#B05C10',light:'#FAEEDA',dark:'#6B3600', std:'Geoffrey Moore / Crossing the Chasm'},
+  tone_and_language:    {label:'Tone & Language',        cat:'Voice',           color:'#0E7C5B',light:'#E2F4EE',dark:'#0A4F3A', std:'Nielsen Norman Group'},
+  structure_and_ia:     {label:'Structure & IA',         cat:'UX Writing',      color:'#1F4D8C',light:'#E8EEF9',dark:'#0D2D5E', std:'Nielsen Norman Group'},
+  // Industry standards
+  readability:          {label:'Readability',            cat:'Accessibility',   color:'#7B3D8C',light:'#F5EAF9',dark:'#4A1A5E', std:'Flesch-Kincaid / Hemingway'},
+  seo_discoverability:  {label:'SEO & Discoverability',  cat:'Findability',     color:'#1A7A3C',light:'#E3F5EB',dark:'#0A4020', std:'Google Search Quality Guidelines'},
+  credibility_trust:    {label:'Credibility & Trust',    cat:'Trust Signals',   color:'#8B4513',light:'#FAEEE6',dark:'#5C2A00', std:'E-E-A-T (Google) / Nielsen Trust'},
+  cta_conversion:       {label:'CTA & Conversion',       cat:'Conversion',      color:'#C0392B',light:'#FDECEB',dark:'#7B1A14', std:'CXL / Unbounce Conversion'},
+  accessibility_incl:   {label:'Accessibility & Inclusion',cat:'Inclusion',     color:'#2E6DA4',light:'#E8F2FA',dark:'#1A3D66', std:'WCAG 2.1 / Plain Language Act'},
+  originality:          {label:'Originality & POV',      cat:'Differentiation', color:'#9B59B6',light:'#F5EEF8',dark:'#5B2C6F', std:'Content Marketing Institute'},
+  accuracy_facts:       {label:'Accuracy & Fact Density',cat:'Credibility',     color:'#1A5276',light:'#EAF2F8',dark:'#0E2D42', std:'Reuters/AP Editorial Standards'},
 };
-const CRITIQUE_SEV={icp_alignment:'high',value_proposition:'high',messaging_clarity:'medium',tone_and_language:'medium',structure_and_ia:'medium'};
 
-let docText='', activeTab='file';
+const CRITIQUE_SEV={icp_alignment:'high',value_proposition:'high',cta_conversion:'high',messaging_clarity:'medium',tone_and_language:'medium',structure_and_ia:'medium',readability:'medium',seo_discoverability:'medium',credibility_trust:'medium',accessibility_incl:'low',originality:'medium',accuracy_facts:'high'};
 
-/* ── ICP chip click ─────────────────────────────────────────────────────────── */
-function setChip(val){
-  document.getElementById('icpHint').value=val;
-  document.querySelectorAll('.chip').forEach(c=>c.style.background='');
-  document.querySelectorAll('.chip').forEach(c=>c.style.color='');
-  document.querySelectorAll('.chip').forEach(c=>{
-    if(c.textContent.toLowerCase()===val){
-      c.style.background='var(--blue)';c.style.color='#fff';c.style.borderColor='var(--blue)';
-    }
-  });
+let docText='', activeTab='file', selectedICPs=new Set(), currentResults=null;
+
+/* ── ICP multi-select chips ─────────────────────────────────────────────────── */
+function toggleChip(el){
+  const id=el.dataset.icp;
+  if(selectedICPs.has(id)){
+    selectedICPs.delete(id);
+    el.classList.remove('selected');
+  } else {
+    selectedICPs.add(id);
+    el.classList.add('selected');
+  }
 }
 
 /* ── Tab switching ─────────────────────────────────────────────────────────── */
@@ -234,7 +245,7 @@ document.getElementById('fileInput').addEventListener('change',e=>{if(e.target.f
 async function readFile(file){
   hideError();hideWarn();
   if(file.type.startsWith('image/')){
-    docText='[IMAGE FILE: '+file.name+']\nAnalyze layout, messaging, visible text, and design quality against the ICP.';
+    docText='[IMAGE FILE: '+file.name+']\nAnalyze layout, messaging, visible text, and design quality.';
     document.getElementById('fileIcon').textContent='🖼️';
     setPill(file.name,false);return;
   }
@@ -245,7 +256,7 @@ async function readFile(file){
       const pdf=await pdfjsLib.getDocument({data:buf}).promise;
       let full='';
       for(let i=1;i<=pdf.numPages;i++){
-        showProc('Extracting text ('+i+'/'+pdf.numPages+' pages)…');
+        showProc('Extracting ('+i+'/'+pdf.numPages+' pages)…');
         const pg=await pdf.getPage(i);
         const ct=await pg.getTextContent();
         full+='\n--- Page '+i+' ---\n'+ct.items.map(x=>x.str).join(' ');
@@ -260,7 +271,7 @@ async function readFile(file){
   reader.onload=e=>{
     const t=e.target.result||'';
     const bin=(t.match(/[\x00-\x08\x0E-\x1F]/g)||[]).length;
-    if(bin>50){showWarn('Binary file detected — export as PDF or .txt for best results.');docText='[Binary: '+file.name+']';}
+    if(bin>50){showWarn('Binary file — export as PDF or .txt for best results.');docText='[Binary: '+file.name+']';}
     else docText=t;
     document.getElementById('fileIcon').textContent='📄';
     setPill(file.name,bin===0);
@@ -273,28 +284,24 @@ async function fetchURL(){
   const url=document.getElementById('urlInput').value.trim();
   if(!url){showError('Enter a URL first.');return;}
   if(!url.startsWith('http')){showError('URL must start with http:// or https://');return;}
-  hideError();hideWarn();
-  showProc('Fetching URL…');
+  hideError();hideWarn();showProc('Fetching URL…');
   document.getElementById('fetchBtn').disabled=true;
   try{
     const res=await fetch('/api/fetch-url',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url}),signal:AbortSignal.timeout(15000)});
     const data=await res.json();
     if(!res.ok) throw new Error(data.error||'Server error');
-    const html=data.html||'';
     const tmp=document.createElement('div');
-    tmp.innerHTML=html.replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<style[\s\S]*?<\/style>/gi,'').replace(/<nav[\s\S]*?<\/nav>/gi,'').replace(/<footer[\s\S]*?<\/footer>/gi,'').replace(/<header[\s\S]*?<\/header>/gi,'');
+    tmp.innerHTML=(data.html||'').replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<style[\s\S]*?<\/style>/gi,'').replace(/<nav[\s\S]*?<\/nav>/gi,'').replace(/<footer[\s\S]*?<\/footer>/gi,'').replace(/<header[\s\S]*?<\/header>/gi,'');
     let text=(tmp.innerText||tmp.textContent||'').replace(/\s{3,}/g,'\n\n').trim();
     if(text.length<100) throw new Error('No readable text found. Page may require login or be JS-rendered.');
     docText='[SOURCE: '+url+']\n\n'+text;
     document.getElementById('fileIcon').textContent='🌐';
-    hideProc();
-    setPill(url.length>60?url.slice(0,57)+'…':url,true);
-    if(text.length<500) showWarn('Limited text extracted — page may be JS-rendered.');
+    hideProc();setPill(url.length>60?url.slice(0,57)+'…':url,true);
+    if(text.length<500) showWarn('Limited text extracted.');
   }catch(e){hideProc();showError('Could not fetch URL: '+e.message);}
   document.getElementById('fetchBtn').disabled=false;
 }
 
-/* ── Helpers ───────────────────────────────────────────────────────────────── */
 function setPill(label,preview){
   document.getElementById('fileName').textContent=label;
   document.getElementById('filePill').style.display='flex';
@@ -328,72 +335,81 @@ async function analyze(){
   if(!docText)return;
   const truncated=docText.length>12000?docText.slice(0,12000)+'\n\n[... truncated ...]':docText;
   const icpHint=(document.getElementById('icpHint').value||'').trim();
+  const selectedArr=[...selectedICPs];
 
-  // Build ICP signals list
   const icpSignalList=ICPS.map(i=>`- ${i.id}: Signals — ${i.signals}`).join('\n');
+  const dimList=Object.entries(DIMS).map(([k,d])=>`- ${k}: ${d.label} (${d.cat}, standard: ${d.std})`).join('\n');
 
-  // ICP hint instruction
-  const icpHintSection = icpHint ? `
-USER'S ICP HINT: "${icpHint}"
-- First, auto-detect the ICP from the document signals (see below).
-- If the hint matches the auto-detected ICP (e.g. hint says "wordpress developer" and doc signals = developer), use the hint description to refine the analysis — treat the audience as specifically "${icpHint}".
-- If the hint does NOT match the auto-detected ICP, IGNORE the hint and use only the auto-detected ICP. Note the mismatch in "icp_mismatch_note".
-` : '';
+  const multiIcpNote = selectedArr.length>0
+    ? `USER SELECTED ICPs: ${selectedArr.join(', ')}${icpHint?' — described as: "'+icpHint+'"':''}\n- Auto-detect the primary ICP from document signals first.\n- If selected ICPs match or overlap the detected ICP, include analysis for ALL selected ICPs.\n- If selected ICPs do not match the detected ICP, note the mismatch and use only detected ICP.\n- If multiple ICPs are selected, provide a combined review covering all of them.`
+    : icpHint ? `USER ICP HINT: "${icpHint}" — use if it matches the auto-detected ICP.` : '';
 
-  const prompt=`You are an expert document reviewer and devil's advocate. Respond with ONLY a valid JSON object. No markdown, no code fences, no explanation. Start with { and end with }.
+  const prompt=`You are an expert document reviewer and devil's advocate applying all industry publishing standards. Respond with ONLY a valid JSON object. No markdown, no code fences, no text before or after. Start with { end with }.
 
 DOCUMENT:
 ${truncated}
 
-${icpHintSection}
+${multiIcpNote}
 
-STEP 1 — AUTO-DETECT ICP from document signals:
+STEP 1 — AUTO-DETECT PRIMARY ICP:
 ${icpSignalList}
-- Pick the SINGLE best match based on what signals appear MOST in the document.
-- developer: tech docs, APIs, code, engineering audience
-- marketer: campaigns, leads, SEO, analytics, marketing audience
-- agency: client work, retainers, white-label, multiple clients
-- founder: startup, MVP, fundraising, early-stage building
-- Do NOT default to founder. If developer/marketer/agency signals exist, pick those.
+Pick the SINGLE best match. Do NOT default to founder unless clearly justified by document signals.
 
-STEP 2 — SCORE each dimension 0-100 against the detected ICP (be harsh):
-- messaging_clarity: Is the core message immediately clear to this ICP?
-- icp_alignment: Does the content speak directly to this ICP's specific pain points?
-- value_proposition: Is the value clear, specific, and compelling for this ICP?
-- tone_and_language: Does the tone/vocabulary match how this ICP thinks and speaks?
-- structure_and_ia: Is the document structured logically for how this ICP reads and decides?
+STEP 2 — SCORE ALL DIMENSIONS (0-100 each, be harsh and specific):
+${dimList}
 
-STEP 3 — For each dimension provide 1-2 suggestions. Each suggestion MUST include:
-- The exact section name from the document
-- What is currently wrong (one sentence)
-- A specific example statement or rewrite they should add/change — make it actionable and copy-paste ready
+Scoring criteria per dimension:
+- messaging_clarity: Is the core message immediately clear to this ICP in under 5 seconds?
+- icp_alignment: Does content directly address this ICP's specific pain points, goals, and language?
+- value_proposition: Is value clear, specific, quantified, and compelling for this ICP?
+- tone_and_language: Does vocabulary, formality, and style match how this ICP thinks and communicates?
+- structure_and_ia: Is flow logical, scannable, and structured for how this ICP reads and decides?
+- readability: Appropriate reading level, sentence length, paragraph density (Flesch-Kincaid standard)?
+- seo_discoverability: Keyword relevance, heading structure, meta intent, search intent alignment?
+- credibility_trust: Social proof, data citations, author authority, E-E-A-T signals present?
+- cta_conversion: Is there a clear, compelling, low-friction next step? Is urgency/benefit clear?
+- accessibility_incl: Plain language, avoids jargon, inclusive terminology, no assumed knowledge?
+- originality: Unique POV, distinct voice, not generic filler content?
+- accuracy_facts: Are claims specific, verifiable, and backed by data or examples?
 
-STEP 4 — Write 3 devil's advocate critiques this ICP would raise when reading the doc.
+STEP 3 — For EACH dimension provide 1-2 suggestions with:
+- exact section name from the document
+- what is currently wrong (one sentence)
+- specific actionable fix
+- example_statement: an exact copy-paste ready sentence/heading/statement they can drop into the doc
+
+STEP 4 — Write 4 devil's advocate critiques this ICP would raise.
 
 RESPOND WITH ONLY THIS JSON:
 {
   "detected_icp": "developer|marketer|agency|founder",
   "detected_icp_reason": "one sentence citing specific signals from the document",
-  "icp_hint_used": true or false,
-  "icp_mismatch_note": "only if hint was ignored — explain why doc signals differ from hint, else empty string",
+  "icps_covered": ["list of icps actually reviewed"],
+  "icp_mismatch_note": "if selected ICPs were ignored, explain why — else empty string",
   "overall_verdict": "one sharp honest sentence",
   "icp_fit_score": 0,
   "scores": {
-    "messaging_clarity": 0,
-    "icp_alignment": 0,
-    "value_proposition": 0,
-    "tone_and_language": 0,
-    "structure_and_ia": 0
+    "messaging_clarity":0,"icp_alignment":0,"value_proposition":0,"tone_and_language":0,
+    "structure_and_ia":0,"readability":0,"seo_discoverability":0,"credibility_trust":0,
+    "cta_conversion":0,"accessibility_incl":0,"originality":0,"accuracy_facts":0
   },
   "score_suggestions": {
-    "messaging_clarity": [{"section":"exact section","what_is_wrong":"current problem","suggestion":"specific fix","example_statement":"exact sentence or copy they should add"}],
-    "icp_alignment":     [{"section":"exact section","what_is_wrong":"current problem","suggestion":"specific fix","example_statement":"exact sentence or copy they should add"}],
-    "value_proposition": [{"section":"exact section","what_is_wrong":"current problem","suggestion":"specific fix","example_statement":"exact sentence or copy they should add"}],
-    "tone_and_language": [{"section":"exact section","what_is_wrong":"current problem","suggestion":"specific fix","example_statement":"exact sentence or copy they should add"}],
-    "structure_and_ia":  [{"section":"exact section","what_is_wrong":"current problem","suggestion":"specific fix","example_statement":"exact sentence or copy they should add"}]
+    "messaging_clarity":   [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}],
+    "icp_alignment":       [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}],
+    "value_proposition":   [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}],
+    "tone_and_language":   [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}],
+    "structure_and_ia":    [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}],
+    "readability":         [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}],
+    "seo_discoverability": [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}],
+    "credibility_trust":   [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}],
+    "cta_conversion":      [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}],
+    "accessibility_incl":  [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}],
+    "originality":         [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}],
+    "accuracy_facts":      [{"section":"","what_is_wrong":"","suggestion":"","example_statement":""}]
   },
   "devil_advocate_critiques": [
-    {"dimension":"icp_alignment|messaging_clarity|value_proposition|tone_and_language|structure_and_ia","critique":"sharp critique this ICP would say"},
+    {"dimension":"...","critique":"..."},
+    {"dimension":"...","critique":"..."},
     {"dimension":"...","critique":"..."},
     {"dimension":"...","critique":"..."}
   ],
@@ -404,14 +420,15 @@ RESPOND WITH ONLY THIS JSON:
   hideError();
   document.getElementById('results').innerHTML='';
   document.getElementById('analyzeBtn').disabled=true;
-  showProc('Analyzing…');
+  showProc('Analyzing across all industry standards…');
 
   try{
     const res=await fetch('/api/review',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
     const data=await res.json();
     if(!res.ok) throw new Error(data.error||'Server error '+res.status);
     hideProc();
-    renderResults(data.result, icpHint);
+    currentResults=data.result;
+    renderResults(data.result,icpHint);
   }catch(e){
     hideProc();
     showError('Analysis failed: '+e.message);
@@ -420,61 +437,84 @@ RESPOND WITH ONLY THIS JSON:
 }
 
 /* ── Render results ────────────────────────────────────────────────────────── */
-function renderResults(r, icpHint){
+function renderResults(r,icpHint){
   const fit=r.icp_fit_score||0;
   const bc=fit>=75?'badge-g':fit>=50?'badge-a':'badge-r';
   const bl=fit>=75?'Good fit':fit>=50?'Partial fit':'Poor fit';
   const icpObj=ICPS.find(i=>i.id===r.detected_icp);
   const icpName=icpObj?icpObj.name:(r.detected_icp||'Unknown');
-  const refinedName = r.icp_hint_used && icpHint ? `${icpName} <span style="font-weight:400;font-size:12px;">(${icpHint})</span>` : icpName;
+  const icpsCovered=(r.icps_covered||[r.detected_icp]).filter(Boolean);
+
+  // group dims by category for display
+  const catGroups={};
+  Object.entries(DIMS).forEach(([k,d])=>{
+    if(!catGroups[d.cat]) catGroups[d.cat]=[];
+    catGroups[d.cat].push({key:k,...d,score:r.scores?.[k]??'-',suggs:r.score_suggestions?.[k]||[]});
+  });
 
   const scores=r.scores||{};
   const suggs=r.score_suggestions||{};
 
-  const scoresHtml=Object.entries(scores).map(([k,v])=>{
-    const label=DIM_LABELS[k]||k;
-    const col=DIM_COLOURS[k]||{a:'#555',l:'#f5f5f5',t:'#222'};
-    const dimSuggs=suggs[k]||[];
-    const suggHtml=dimSuggs.map(s=>`
-      <div class="suggestion-card">
-        <div class="sc-header" style="background:${col.l};color:${col.t};">
-          <span style="width:8px;height:8px;border-radius:50%;background:${col.a};display:inline-block;flex-shrink:0;"></span>
-          <span style="font-weight:700;">${label}</span>
-          <span class="sc-section" style="color:${col.t};">📍 ${s.section||'General'}</span>
+  // Overall average
+  const scoreVals=Object.values(scores).filter(v=>typeof v==='number');
+  const avgScore=scoreVals.length?Math.round(scoreVals.reduce((a,b)=>a+b,0)/scoreVals.length):0;
+
+  // Build grouped score blocks
+  let scoresHtml='';
+  Object.entries(catGroups).forEach(([cat,dims])=>{
+    scoresHtml+=`<div style="margin-bottom:0.75rem;"><div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;padding:0 2px;">${cat}</div>`;
+    dims.forEach(d=>{
+      const v=typeof d.score==='number'?d.score:0;
+      const suggHtml=d.suggs.map(s=>`
+        <div class="suggestion-card">
+          <div class="sc-header" style="background:${d.light};color:${d.dark};">
+            <span style="width:7px;height:7px;border-radius:50%;background:${d.color};display:inline-block;flex-shrink:0;"></span>
+            <span style="font-weight:700;">${d.label}</span>
+            <span class="sc-section" style="color:${d.dark};">📍 ${s.section||'General'}</span>
+          </div>
+          ${s.what_is_wrong?`<div class="sc-what">⚠ ${s.what_is_wrong}</div>`:''}
+          <div class="sc-body" style="border-left-color:${d.color};">💡 ${s.suggestion}</div>
+          ${s.example_statement?`<div class="sc-example"><div class="sc-example-inner" style="background:${d.light};border-color:${d.color};color:${d.dark};">✏️ <strong>Try this:</strong> "${s.example_statement}"</div></div>`:''}
+        </div>`).join('');
+      scoresHtml+=`<div class="dim-block" style="border-color:${d.color}40;">
+        <div class="dim-header" style="background:${d.light};">
+          <span class="dim-dot" style="background:${d.color};"></span>
+          <span class="dim-title" style="color:${d.dark};">${d.label}</span>
+          <span class="dim-std">${d.std}</span>
+          <div class="dim-bar"><div class="dim-fill" style="width:${v}%;background:${d.color};"></div></div>
+          <span class="dim-score" style="color:${d.color};">${v}/100</span>
         </div>
-        ${s.what_is_wrong?`<div class="sc-what">⚠ ${s.what_is_wrong}</div>`:''}
-        <div class="sc-body" style="border-left-color:${col.a};">💡 ${s.suggestion}</div>
-        ${s.example_statement?`<div class="sc-example"><div class="sc-example-inner" style="background:${col.l};border-color:${col.a};color:${col.t};">✏️ <strong>Try this:</strong> "${s.example_statement}"</div></div>`:''}
-      </div>`).join('');
-    return `<div class="dim-block" style="border-color:${col.a}40;">
-      <div class="dim-header" style="background:${col.l};">
-        <span class="dim-dot" style="background:${col.a};"></span>
-        <span class="dim-title" style="color:${col.t};">${label}</span>
-        <div class="dim-bar"><div class="dim-fill" style="width:${v}%;background:${col.a};"></div></div>
-        <span class="dim-score" style="color:${col.a};">${v}/100</span>
-      </div>
-      ${suggHtml}
-    </div>`;
-  }).join('');
+        ${suggHtml}
+      </div>`;
+    });
+    scoresHtml+='</div>';
+  });
 
   const critiquesHtml=(r.devil_advocate_critiques||[]).map(c=>{
     const obj=typeof c==='object'?c:{dimension:'general',critique:c};
     const sev=CRITIQUE_SEV[obj.dimension]||'medium';
-    const dimLabel=DIM_LABELS[obj.dimension]||obj.dimension||'General';
-    const col=DIM_COLOURS[obj.dimension]||{a:'#E24B4A',l:'#FCEBEB',t:'#3d0f0f'};
-    const sevBg=sev==='high'?'#FCEBEB':'#FAEEDA';
-    const sevBorder=sev==='high'?'#E24B4A':'#C97B20';
-    const sevText=sev==='high'?'#3d0f0f':'#5C3200';
+    const dimDef=DIMS[obj.dimension]||{label:obj.dimension||'General',color:'#E24B4A',light:'#FCEBEB',dark:'#3d0f0f'};
+    const sevBg=sev==='high'?'#FCEBEB':sev==='medium'?'#FAEEDA':'#F5F5F5';
+    const sevBorder=sev==='high'?'#E24B4A':sev==='medium'?'#C97B20':'#999';
+    const sevText=sev==='high'?'#3d0f0f':sev==='medium'?'#5C3200':'#333';
     const sevTag=sev==='high'
       ?`<span style="padding:2px 7px;border-radius:4px;background:#E24B4A;color:#fff;font-size:10px;font-weight:700;">HIGH</span>`
-      :`<span style="padding:2px 7px;border-radius:4px;background:#C97B20;color:#fff;font-size:10px;font-weight:700;">MED</span>`;
+      :sev==='medium'
+      ?`<span style="padding:2px 7px;border-radius:4px;background:#C97B20;color:#fff;font-size:10px;font-weight:700;">MED</span>`
+      :`<span style="padding:2px 7px;border-radius:4px;background:#888;color:#fff;font-size:10px;font-weight:700;">LOW</span>`;
     return `<div class="critique-card" style="background:${sevBg};border-left:3px solid ${sevBorder};">
       <div class="cc-head" style="background:${sevBg};color:${sevText};">
         ${sevTag}
-        <span style="padding:2px 8px;border-radius:4px;background:${col.l};color:${col.a};font-size:11px;font-weight:600;">${dimLabel}</span>
+        <span style="padding:2px 8px;border-radius:4px;background:${dimDef.light};color:${dimDef.color};font-size:11px;font-weight:600;">${dimDef.label}</span>
       </div>
       <div class="cc-body" style="color:${sevText};">${obj.critique||c}</div>
     </div>`;
+  }).join('');
+
+  // ICP coverage pills
+  const icpPills=icpsCovered.map(id=>{
+    const obj=ICPS.find(i=>i.id===id);
+    return obj?`<span style="padding:3px 10px;border-radius:99px;background:${obj.light};color:${obj.color};font-size:12px;font-weight:600;border:1px solid ${obj.color}40;">${obj.name}</span>`:'';
   }).join('');
 
   const el=document.getElementById('results');
@@ -482,19 +522,23 @@ function renderResults(r, icpHint){
   el.innerHTML=`
     <div class="divider"></div>
     <div class="verdict-card">
-      <div style="font-size:12px;font-weight:600;color:var(--green);background:var(--green-l);padding:7px 12px;border-radius:var(--r);margin-bottom:10px;display:inline-flex;align-items:center;gap:6px;">
-        🎯 Detected ICP: <strong>${refinedName}</strong>${r.icp_hint_used?' <span style="font-weight:400;color:#3B6D11;">· hint applied</span>':''}
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+        <span style="font-size:12px;font-weight:600;color:var(--green);">🎯 Detected ICP:</span>
+        ${icpPills||`<span style="font-size:13px;font-weight:600;">${icpName}</span>`}
+        ${icpHint&&r.icp_hint_used?`<span style="font-size:11px;color:var(--muted);">· "${icpHint}"</span>`:''}
       </div>
-      ${r.icp_mismatch_note?`<div class="mismatch-banner">⚡ ICP hint ignored: ${r.icp_mismatch_note}</div>`:''}
-      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">${r.detected_icp_reason||''}</div>
-      <div style="margin-bottom:6px;">
-        <span class="score-big">${fit}<span>/100</span></span>
-        <span class="badge ${bc}">${bl}</span>
+      ${r.icp_mismatch_note?`<div class="mismatch-banner">⚡ ICP hint/selection overridden: ${r.icp_mismatch_note}</div>`:''}
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">${r.detected_icp_reason||''}</div>
+      <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:6px;">
+        <div><span style="font-size:11px;color:var(--muted);font-weight:500;">ICP FIT</span><br><span class="score-big">${fit}<span>/100</span></span><span class="badge ${bc}">${bl}</span></div>
+        <div><span style="font-size:11px;color:var(--muted);font-weight:500;">AVG ACROSS ALL DIMS</span><br><span class="score-big" style="font-size:22px;">${avgScore}<span>/100</span></span></div>
       </div>
       <div class="verdict-text">"${r.overall_verdict}"</div>
     </div>
     <div class="card">
-      <div class="lbl" style="margin-bottom:1rem;">Dimension Scores & Improvements</div>
+      <div class="lbl" style="margin-bottom:1rem;">All Dimensions — Scores & Improvements
+        <span style="font-weight:400;color:var(--faint);font-size:10px;margin-left:6px;">Industry standards shown per dimension</span>
+      </div>
       ${scoresHtml}
     </div>
     <div class="card">
