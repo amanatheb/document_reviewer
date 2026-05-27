@@ -11,9 +11,10 @@ app.use(express.static("public"));
 
 // Current active Groq models — smallest first to save daily quota
 const MODELS = [
-  "llama-3.1-8b-instant",    // 8B — fastest, uses fewest tokens
-  "llama-3.3-70b-versatile", // 70B — better quality, more tokens
-  "llama-4-scout-17b-16e-instruct", // Llama 4 Scout — separate quota pool
+  "llama-3.1-8b-instant",                    // 8B — fastest, fewest tokens
+  "llama-3.3-70b-versatile",                 // 70B — better quality
+  "meta-llama/llama-4-scout-17b-16e-instruct", // Llama 4 Scout — separate quota
+  "qwen/qwen3-32b",                          // Qwen 32B — extra fallback
 ];
 
 async function callGroq(prompt, modelIndex = 0) {
