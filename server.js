@@ -89,6 +89,12 @@ app.post("/api/review", async (req, res) => {
   }
 });
 
+// ── Ping — for cold start detection ──────────────────────────────────────────
+app.get("/api/ping", (req, res) => res.json({ ok: true }));
+
+// ── Ping — cold start detection ───────────────────────────────────────────────
+app.get("/api/ping", (req, res) => res.json({ ok: true }));
+
 // ── URL fetch proxy ────────────────────────────────────────────────────────────
 app.post("/api/fetch-url", async (req, res) => {
   const { url } = req.body;
@@ -108,4 +114,4 @@ const uploadsDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`✅ ICP Reviewer → http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`✅ Document Reviewer → http://localhost:${PORT}`));
