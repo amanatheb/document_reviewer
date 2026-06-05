@@ -135,6 +135,14 @@ input[type="file"]{display:none;}
 </style>
 </head>
 <body>
+
+<!-- Wake-up overlay — shown only on cold start (>2s response) -->
+<div id="wakeOverlay" style="display:none;position:fixed;inset:0;background:rgba(255,255,255,0.92);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
+  <div style="width:32px;height:32px;border:2.5px solid #E0E0E0;border-top-color:#2C4A6E;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+  <div style="font-size:14px;font-weight:500;color:#2C4A6E;">Starting up…</div>
+  <div style="font-size:12px;color:#9A9A9A;">First load may take up to 30 seconds</div>
+</div>
+
 <div class="page">
   <h1>Document Reviewer</h1>
   <p class="subtitle">Upload a doc or paste a URL — scored against all major content quality dimensions</p>
@@ -783,6 +791,17 @@ function toggleDim(uid, header){
   const open=body.classList.toggle('open');
   if(chev) chev.textContent=open?'▾':'▸';
 }
+
+/* ── Wake-up ping — detect cold start and show overlay ─────────────────────── */
+(function(){
+  const start = Date.now();
+  const overlay = document.getElementById('wakeOverlay');
+  // Ping the server; if it takes >1.5s, show the overlay
+  const timer = setTimeout(()=>{ if(overlay) overlay.style.display='flex'; }, 1500);
+  fetch('/api/ping', {method:'GET'})
+    .then(()=>{ clearTimeout(timer); if(overlay) overlay.style.display='none'; })
+    .catch(()=>{ clearTimeout(timer); if(overlay) overlay.style.display='none'; });
+})();
 
 function buildCritiques(critiques){
   return critiques.map(c=>{
